@@ -4,7 +4,7 @@
   "description": "Virtual Tavle as Web Component",
   "main": "VirtualTableComponent.js",
   "scripts": {
-    "run": "http-server"
+    "run": "http-server -c-1"
   },
   "repository": {
     "type": "git",
