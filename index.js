@@ -1,3 +1,5 @@
+import './VirtualTableComponent.js'
+
 const table = document.querySelector('virtual-table-component')
 table.setColumns([{
         name: "Name"
