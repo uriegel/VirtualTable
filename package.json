@@ -1,0 +1,22 @@
+{
+  "name": "virtualtablecomponent",
+  "version": "1.0.0",
+  "description": "Virtual Tavle as Web Component",
+  "main": "VirtualTableComponent.js",
+  "scripts": {
+    "run": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uriegel/VirtualTableComponent.git"
+  },
+  "author": "Uwe Riegel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uriegel/VirtualTableComponent/issues"
+  },
+  "homepage": "https://github.com/uriegel/VirtualTableComponent#readme",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
+}
