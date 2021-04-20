@@ -11,3 +11,8 @@ table.setColumns([{
         name: "Größe"
     }]
 )
+
+// TODO: Themes with different font sizes
+// TODO: Adaptable column widthes
+// TODO: Sortable: highlighted, asc, desc
+// TODO: SubColumn, sortable

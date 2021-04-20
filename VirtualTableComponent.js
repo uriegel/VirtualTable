@@ -2,12 +2,36 @@ const template = document.createElement('template')
 template.innerHTML = `  
     <style>
         :host {
-            --color: red;
-            --font-size: 16px;
+            --vtc-color: black;
+            --vtc-background-color: white;
+            --vtc-caption-color: white;
+            --vtc-caption-background-color: blue;
+            --vtc-font-size: 100%;
         }
-        p {
-            color: var(--color);
-            font-size: var(--font-size);
+        table {
+            width: 100%;
+            border-spacing: 0px;
+            color: var(--vtc-color);
+            background-color: var(--vtc-background-color);
+            font-size: var(--vtc-font-size);
+        }
+        thead {
+            color: var(--vtc-caption-color);
+            background-color: var(--vtc-caption-background-color);
+        }
+        th {
+            text-align: left;
+            font-weight: normal;
+            border-left-style: solid;
+            border-left-width: 1px;
+            padding-left: 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            -webkit-user-select: none;            
+            user-select: none;            
+        }
+        th:first-child {
+            border-left-width: 0px;
         }
     </style>
     <table>
@@ -15,6 +39,16 @@ template.innerHTML = `
             <tr></tr>
         </thead>
         <tbody>
+            <tr>
+                <td>Eintr. 1</td>
+                <td>Eintr. 2</td>
+                <td>Eintr. 3</td>
+            </tr>
+            <tr>
+                <td>Eintr. 1.1</td>
+                <td>Eintr. 2.1</td>
+                <td>Eintr. 3.1</td>
+            </tr>
         </tbody>
     </table>
 `
