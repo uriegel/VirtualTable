@@ -101,7 +101,6 @@ class VirtualTableComponent extends HTMLElement {
     
                 const startDragPosition = evt.pageX
                 const targetColumn = th.closest("th")
-                //const ths = Array.from(targetColumn.parentElement.children)
     
                 const currentHeader = dragleft ? targetColumn.previousElementSibling : targetColumn
                 if (!currentHeader)
@@ -160,8 +159,7 @@ class VirtualTableComponent extends HTMLElement {
                     window.removeEventListener('mouseup', onup)
                     document.body.style.cursor = 'auto'
                     
-                    // TODO:
-                    // onWidthsChanged(getWidths())
+                    this.dispatchEvent(new CustomEvent('columnwidths', { detail: getWidths() }))
                 }
     
                 window.addEventListener('mousemove', onmove)
@@ -193,6 +191,8 @@ class VirtualTableComponent extends HTMLElement {
         columns.forEach(n => {
             const th = document.createElement('th')
             th.innerHTML = n.name
+            if (n.width)
+                th.style.width = n.width + '%'
             this.headRow.appendChild(th)
         })
     }
