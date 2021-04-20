@@ -9,11 +9,17 @@ template.innerHTML = `
             --vtc-caption-separator-color: white;
             --vtc-font-size: 100%;
         }
+        .tableroot {
+            position: absolute;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--vtc-background-color);
+            outline-width: 0px;
+        }        
         table {
             width: 100%;
             border-spacing: 0px;
             color: var(--vtc-color);
-            background-color: var(--vtc-background-color);
             font-size: var(--vtc-font-size);
             table-layout: fixed;
         }
@@ -46,23 +52,25 @@ template.innerHTML = `
             border-left-width: 0px;
         }
     </style>
-    <table>
-        <thead>
-            <tr></tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Eintr. 1</td>
-                <td>Eintr. 2</td>
-                <td>Eintr. 3</td>
-            </tr>
-            <tr>
-                <td>Eintr. 1.1</td>
-                <td>Eintr. 2.1</td>
-                <td>Eintr. 3.1</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="tableroot">
+        <table>
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Eintr. 1</td>
+                    <td>Eintr. 2</td>
+                    <td>Eintr. 3</td>
+                </tr>
+                <tr>
+                    <td>Eintr. 1.1</td>
+                    <td>Eintr. 2.1</td>
+                    <td>Eintr. 3.1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 `
 /**
  * @typedef {Object} Column
