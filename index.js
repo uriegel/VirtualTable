@@ -39,6 +39,6 @@ table.setColumns([{
     }]
 )
 
-// TODO: Adaptable column widthes
+// TODO: Save column widths
 // TODO: Sortable: highlighted, asc, desc
 // TODO: SubColumn, sortable
