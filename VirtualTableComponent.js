@@ -68,6 +68,27 @@ class VirtualTableComponent extends HTMLElement {
         this.headRow = this.shadowRoot.querySelector('thead>tr')
     }
 
+    connectedCallback() {
+        let draggingReady = false
+        const onMouseMove = evt => {
+            const thWidth = evt.target.clientWidth + evt.target.clientLeft
+            const mouseX = evt.offsetX + evt.target.clientLeft
+            const trRect = evt.target.parentElement.getBoundingClientRect()
+            const absoluteRight = trRect.width + trRect.x                
+            draggingReady = 
+                (mouseX < 3 || mouseX > thWidth - 4) 
+                && (evt.pageX - trRect.x > 4)
+                && (evt.pageX < absoluteRight - 4)
+            document.body.style.cursor = draggingReady ? 'ew-resize' : 'auto'
+        }
+
+        this.headRow.addEventListener('mousemove', onMouseMove)
+        this.headRow.addEventListener('mouseleave', () => {
+            draggingReady = false
+            document.body.style.cursor = 'auto'
+        })        
+    }
+
     /**
      * 
      * @param {Column[]} columns 
