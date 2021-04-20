@@ -3,6 +3,10 @@
     --vtc-background-color: #fcfcfc;
     --vtc-caption-color: #737373;
     --vtc-caption-background-color: #eff0f1;
+    --vtc-caption-background-hover-color: #e2e2e2;
     --vtc-caption-separator-color: #737373;
+}
+.isSortable:hover {
+    background-color: var(--tablereact-selected-background-hover-color    
 }
 

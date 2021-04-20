@@ -6,6 +6,7 @@ template.innerHTML = `
             --vtc-background-color: white;
             --vtc-caption-color: white;
             --vtc-caption-background-color: blue;
+            --vtc-caption-background-hover-color: #0063ff;
             --vtc-caption-separator-color: white;
             --vtc-font-size: 100%;
         }
@@ -51,6 +52,30 @@ template.innerHTML = `
         th:first-child {
             border-left-width: 0px;
         }
+        .isSortable {
+            transition: background-color 0.3s; 
+        }
+        .isSortable:hover {
+            background-color: var(--vtc-caption-background-hover-color);
+        }        
+        .sortAscending:before {
+            position: relative;
+            bottom: 11px;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 6px solid var(--vtc-caption-color);
+            content: '';
+            margin-right: 5px;
+        }
+        .sortDescending:before {
+            position: relative;
+            top: 10px;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 6px solid var(--vtc-caption-color);
+            content: '';
+            margin-right: 5px;
+        }
     </style>
     <div class="tableroot">
         <table>
@@ -87,22 +112,21 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        let draggingReady = false
-         
+       
         const onMouseMove = evt => {
             const thWidth = evt.target.clientWidth + evt.target.clientLeft
             const mouseX = evt.offsetX + evt.target.clientLeft
             const trRect = evt.target.parentElement.getBoundingClientRect()
             const absoluteRight = trRect.width + trRect.x                
-            draggingReady = 
+            this.draggingReady = 
                 (mouseX < 3 || mouseX > thWidth - 4) 
                 && (evt.pageX - trRect.x > 4)
                 && (evt.pageX < absoluteRight - 4)
-            document.body.style.cursor = draggingReady ? 'ew-resize' : 'auto'
+            document.body.style.cursor = this.draggingReady ? 'ew-resize' : 'auto'
         }
 
         const onMouseDown = evt => {
-            if (draggingReady) {
+            if (this.draggingReady) {
                 const th = evt.target
                 const mouseX = evt.offsetX + th.clientLeft
                 const dragleft = mouseX < 3
@@ -153,7 +177,7 @@ class VirtualTableComponent extends HTMLElement {
                     evt.preventDefault()
                 }
     
-                const onup = () => {
+                const onup = evt => {
                     const getWidths = () => {
                         const ths = Array.from(targetColumn.parentElement.children)
                          return ths.map(th => 
@@ -168,6 +192,8 @@ class VirtualTableComponent extends HTMLElement {
                     document.body.style.cursor = 'auto'
                     
                     this.dispatchEvent(new CustomEvent('columnwidths', { detail: getWidths() }))
+                    evt.preventDefault()
+                    evt.stopPropagation()
                 }
     
                 window.addEventListener('mousemove', onmove)
@@ -179,7 +205,7 @@ class VirtualTableComponent extends HTMLElement {
 
         this.headRow.addEventListener('mousemove', onMouseMove)
         this.headRow.addEventListener('mouseleave', () => {
-            draggingReady = false
+            this.draggingReady = false
             document.body.style.cursor = 'auto'
         })        
         this.headRow.addEventListener('mousedown', onMouseDown)
@@ -196,11 +222,34 @@ class VirtualTableComponent extends HTMLElement {
         while (last = this.headRow.lastChild) 
             this.headRow.removeChild(last)
     
-        columns.forEach(n => {
+        columns.forEach((n, i) => {
             const th = document.createElement('th')
             th.innerHTML = n.name
             if (n.width)
                 th.style.width = n.width + '%'
+            if (n.isSortable) {
+                th.classList.add("isSortable") 
+                th.onclick = () => {
+                    if (this.draggingReady)
+                        return
+                    Array.from(this.headRow.children)
+                        .filter( n => n != th)
+                        .forEach(n => {
+                            n.classList.remove("sortDescending")
+                            n.classList.remove("sortAscending")
+                        })
+                    let descending = false
+                    if (th.classList.contains("sortAscending")) {
+                        th.classList.remove("sortAscending")
+                        th.classList.add("sortDescending")
+                        descending = true
+                    } else {
+                        th.classList.remove("sortDescending")
+                        th.classList.add("sortAscending")
+                    }
+                    this.dispatchEvent(new CustomEvent('columclick', { detail: { column: i, descending } }))
+                }
+            }
             this.headRow.appendChild(th)
         })
     }
