@@ -1,0 +1,12 @@
+:root .themeAdwaitaDark {
+    background-color: rgb(94, 94, 94);
+    --vtc-color: white;
+    --vtc-background-color: #2f2f2f;
+    --vtc-caption-color: #dddddd;
+    --vtc-caption-background-color: #353535;
+    --vtc-caption-separator-color: #737373;
+}
+
+body.themeAdwaitaDark {
+    font-size: 70%;
+}

@@ -1,10 +1,19 @@
 <html>
     <head>
         <title>Virtual Table Component</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/themes/blue.css">
+        <link rel="stylesheet" href="styles/themes/adwaita.css">
+        <link rel="stylesheet" href="styles/themes/adwaita-dark.css">
     </head>
 
-    <body>
+    <body class="themeBlue">
+        <select id="themeChooser">
+            <option>Blue</option>
+            <option>Adwaita</option>
+            <option>Adwaita dark</option>
+        </select>
+
         <div class="tableContainer" >
             <virtual-table-component></virtual-table-component>
         </div>

@@ -6,6 +6,7 @@ template.innerHTML = `
             --vtc-background-color: white;
             --vtc-caption-color: white;
             --vtc-caption-background-color: blue;
+            --vtc-caption-separator-color: white;
             --vtc-font-size: 100%;
         }
         table {
@@ -24,6 +25,7 @@ template.innerHTML = `
             font-weight: normal;
             border-left-style: solid;
             border-left-width: 1px;
+            border-left-color: var(--vtc-caption-separator-color);
             padding-left: 5px;
             overflow: hidden;
             white-space: nowrap;
@@ -71,7 +73,6 @@ class VirtualTableComponent extends HTMLElement {
      * @param {Column[]} columns 
      */
     setColumns(columns) {
-        console.log("setColumns", columns, this.headRow)
         let last
         while (last = this.headRow.lastChild) 
             this.headRow.removeChild(last)
