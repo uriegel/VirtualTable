@@ -9,6 +9,17 @@ template.innerHTML = `
             --vtc-caption-background-hover-color: #0063ff;
             --vtc-caption-separator-color: white;
             --vtc-font-size: 100%;
+            --vtc-scrollbar-width: 16px;
+            --vtc-scrollbar-border-color: gray;
+            --vtc-scrollbar-border-width: 1px;
+            --vtc-scrollbar-button-background-color: white;
+            --vtc-scrollbar-button-color: #666;
+            --vtc-scrollbar-button-hover-color: #555
+            --vtc-scrollbar-button-active-color: #444
+            --vtc-scrollbar-button-hover-background-color: rgb(209, 209, 209);
+            --vtc-scrollbar-button-active-background-color: #aaa;
+            --vtc-scrollbar-grip-color: rgb(209, 209, 209); 
+            --tablereact-vtc-grip-width: 100%;
         }
         .tableroot {
             position: absolute;
@@ -76,6 +87,69 @@ template.innerHTML = `
             content: '';
             margin-right: 5px;
         }
+        .scrollbar {
+            position: absolute;
+            width: var(--vtc-scrollbar-width); 
+            right: 0px;
+            overflow: hidden;
+            border-style: solid;
+            box-sizing: border-box;
+            border-color: var(--vtc-scrollbar-border-color);
+            border-width: var(--vtc-scrollbar-border-width);
+            user-select: none;
+            display: flex;
+            flex-direction: column;  
+            transition: transform 0.3s;  
+            bottom: 0px;
+        }
+        .svg {
+            display: var(--vtc-scrollbar-button-display);
+            width: 100%;
+            background-color: var(--vtc-scrollbar-button-background-color);
+            transition: background-color 0.3s;
+        }
+        .svg:hover {
+            background-color: var(--vtc-scrollbar-button-hover-background-color);
+        }
+        .svg:active {
+            background-color: var(--vtc-scrollbar-button-active-background-color);
+            cursor: default;
+        }
+        .button {
+            fill: var(--vtc-scrollbar-button-color);
+            fill-opacity: 1; 
+            stroke:none;            
+        }
+        .scrollbarElement {
+            background-color: var(--vtc-scrollbar-background-color);
+            transition: background-color 1s;
+            flex-grow: 1;
+            position: relative;	
+        }
+        .scrollbarElement:hover {
+            background-color: var(--vtc-scrollbar-background-hover-color);
+        }
+        .scrollbarElement:active {
+            background-color: var(--vtc-scrollbar-background-hover-color);
+        }        
+        .svg:hover .button {
+            fill: var(--vtc-scrollbar-button-hover-color); 
+        }
+        .svg:active .button {
+            fill: var(--vtc-scrollbar-button-active-color); 
+        }        
+        .grip {
+            position: absolute;
+            box-sizing: border-box;
+            border-radius: var(--vtc-scrollbar-grip-radius);
+            background-color: var(--vtc-scrollbar-grip-color);
+            width: var(--tablereact-vtc-grip-width);
+            right: var(--tablereact-vtc-grip-right);
+            transition: background-color 0.5s, width 0.5s;
+
+            top: 20px;
+            height: 30px;
+        }        
     </style>
     <div class="tableroot">
         <table>
@@ -96,6 +170,17 @@ template.innerHTML = `
             </tbody>
         </table>
     </div>
+    <div class="scrollbar">
+        <svg class="svg" viewBox="0 0 100 100" >
+            <path class="button" d="M 20,70 50,30 80,70 Z" / >
+        </svg>
+        <div class="scrollbarElement">
+            <div class="grip"></div>
+        </div>
+        <svg class="svg" viewBox="0 0 100 100" >
+            <path class="button" d="M 80,30 50,70 20,30 Z" />
+        </svg>
+    </div>
 `
 /**
  * @typedef {Object} Column
@@ -109,6 +194,7 @@ class VirtualTableComponent extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
         this.headRow = this.shadowRoot.querySelector('thead>tr')
+        this.scrollbar = this.shadowRoot.querySelector('.scrollbar')
     }
 
     connectedCallback() {
@@ -251,6 +337,7 @@ class VirtualTableComponent extends HTMLElement {
                 }
             }
             this.headRow.appendChild(th)
+            this.scrollbar.style.height = `calc(100% - ${this.headRow.clientHeight}px)` 
         })
     }
 }
