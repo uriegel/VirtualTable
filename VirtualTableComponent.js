@@ -215,14 +215,22 @@ class VirtualTableComponent extends HTMLElement {
     connectedCallback() {
        
         const onMouseMove = evt => {
-            const thWidth = evt.target.clientWidth + evt.target.clientLeft
-            const mouseX = evt.offsetX + evt.target.clientLeft
-            const trRect = evt.target.parentElement.getBoundingClientRect()
+            const element = evt.target.tagName == "TH" ? evt.target : evt.target.parentElement.parentElement
+            console.log(element.tagName)
+            const thWidth = element.clientWidth + element.clientLeft
+            const mouseX = evt.offsetX + element.clientLeft
+            const trRect = element.parentElement.getBoundingClientRect()
             const absoluteRight = trRect.width + trRect.x                
-            this.draggingReady = 
+            let draggingReady = 
                 (mouseX < 3 || mouseX > thWidth - 4) 
                 && (evt.pageX - trRect.x > 4)
                 && (evt.pageX < absoluteRight - 4)
+            if (draggingReady && evt.target.tagName != "TH") {
+                const first = evt.target.style.flexGrow == 1
+                if (first && mouseX > thWidth - 4 || !first && mouseX < 3)
+                    draggingReady = false
+            }
+            this.draggingReady = draggingReady
             document.body.style.cursor = this.draggingReady ? 'ew-resize' : 'auto'
         }
 
@@ -325,7 +333,6 @@ class VirtualTableComponent extends HTMLElement {
     
         columns.forEach((n, i) => {
             const th = document.createElement('th')
-            th.innerHTML = n.name
             if (n.width)
                 th.style.width = n.width + '%'
             if (n.isSortable) {
@@ -336,20 +343,36 @@ class VirtualTableComponent extends HTMLElement {
                     Array.from(this.headRow.children)
                         .filter( n => n != th)
                         .forEach(n => {
-                            n.classList.remove("sortDescending")
-                            n.classList.remove("sortAscending")
+                            const element = n.firstChild.firstChild || n 
+                            element.classList.remove("sortDescending")
+                            element.classList.remove("sortAscending")
                         })
                     let descending = false
-                    if (th.classList.contains("sortAscending")) {
-                        th.classList.remove("sortAscending")
-                        th.classList.add("sortDescending")
+                    let element = th.firstChild.firstChild || th
+                    if (element.classList.contains("sortAscending")) {
+                        element.classList.remove("sortAscending")
+                        element.classList.add("sortDescending")
                         descending = true
                     } else {
-                        th.classList.remove("sortDescending")
-                        th.classList.add("sortAscending")
+                        element.classList.remove("sortDescending")
+                        element.classList.add("sortAscending")
                     }
                     this.dispatchEvent(new CustomEvent('columclick', { detail: { column: i, descending } }))
                 }
+            }
+            if (!n.subItem) 
+                th.innerHTML = n.name
+            else {
+                const thDiv = document.createElement('div')
+                thDiv.style.display = "flex"
+                const thContent = document.createElement('span')
+                thContent.innerHTML = n.name
+                thContent.style.flexGrow = 1
+                const thSubContent = document.createElement('span')
+                thSubContent.innerHTML = n.subItem.name
+                thDiv.appendChild(thContent)
+                thDiv.appendChild(thSubContent)
+                th.appendChild(thDiv)
             }
             this.headRow.appendChild(th)
             this.scrollbar.style.height = `calc(100% - ${this.headRow.clientHeight}px)` 
