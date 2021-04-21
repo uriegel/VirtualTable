@@ -216,7 +216,6 @@ class VirtualTableComponent extends HTMLElement {
        
         const onMouseMove = evt => {
             const element = evt.target.tagName == "TH" ? evt.target : evt.target.parentElement.parentElement
-            console.log(element.tagName)
             const thWidth = element.clientWidth + element.clientLeft
             const mouseX = evt.offsetX + element.clientLeft
             const trRect = element.parentElement.getBoundingClientRect()
@@ -336,19 +335,31 @@ class VirtualTableComponent extends HTMLElement {
             if (n.width)
                 th.style.width = n.width + '%'
             if (n.isSortable) {
-                th.classList.add("isSortable") 
-                th.onclick = () => {
+                th.onclick = evt => {
                     if (this.draggingReady)
                         return
+
+                    const remove = element =>  {
+                        element.classList.remove("sortDescending")
+                        element.classList.remove("sortAscending")
+                    }
+
+                    const subItem = evt.target.tagName == "SPAN" && evt.target.style.flexGrow != 1
                     Array.from(this.headRow.children)
                         .filter( n => n != th)
                         .forEach(n => {
-                            const element = n.firstChild.firstChild || n 
-                            element.classList.remove("sortDescending")
-                            element.classList.remove("sortAscending")
+                            if (n.firstChild.firstChild) {
+                                remove(n.firstChild.firstChild)
+                                remove(n.firstChild.children[1])
+                            }
+                            else
+                                remove(n)
                         })
                     let descending = false
-                    let element = th.firstChild.firstChild || th
+                    
+                    let element = th.firstChild.firstChild 
+                        ? subItem ? th.firstChild.children[1] : th.firstChild.firstChild 
+                        : th
                     if (element.classList.contains("sortAscending")) {
                         element.classList.remove("sortAscending")
                         element.classList.add("sortDescending")
@@ -357,11 +368,19 @@ class VirtualTableComponent extends HTMLElement {
                         element.classList.remove("sortDescending")
                         element.classList.add("sortAscending")
                     }
-                    this.dispatchEvent(new CustomEvent('columclick', { detail: { column: i, descending } }))
+                    if (th.firstChild.firstChild) {
+                        let element = subItem ? th.firstChild.firstChild : th.firstChild.children[1]
+                        remove(element)
+                    }
+
+                    this.dispatchEvent(new CustomEvent('columclick', { detail: { column: i, descending, subItem } }))
                 }
             }
-            if (!n.subItem) 
+            if (!n.subItem) {
                 th.innerHTML = n.name
+                if (n.isSortable)
+                    th.classList.add("isSortable") 
+            }
             else {
                 const thDiv = document.createElement('div')
                 thDiv.style.display = "flex"
@@ -370,6 +389,10 @@ class VirtualTableComponent extends HTMLElement {
                 thContent.style.flexGrow = 1
                 const thSubContent = document.createElement('span')
                 thSubContent.innerHTML = n.subItem.name
+                if (n.isSortable) {
+                    thContent.classList.add("isSortable") 
+                    thSubContent.classList.add("isSortable") 
+                }
                 thDiv.appendChild(thContent)
                 thDiv.appendChild(thSubContent)
                 th.appendChild(thDiv)
