@@ -19,7 +19,9 @@ template.innerHTML = `
             --vtc-scrollbar-button-hover-background-color: rgb(209, 209, 209);
             --vtc-scrollbar-button-active-background-color: #aaa;
             --vtc-scrollbar-grip-color: rgb(209, 209, 209); 
-            --tablereact-vtc-grip-width: 100%;
+            --vtc-scrollbar-grip-hover-color: #bbb;
+            --vtc-scrollbar-grip-active-color: #999;
+            --vtc-scrollbar-grip-width: 100%;
         }
         .tableroot {
             position: absolute;
@@ -143,13 +145,26 @@ template.innerHTML = `
             box-sizing: border-box;
             border-radius: var(--vtc-scrollbar-grip-radius);
             background-color: var(--vtc-scrollbar-grip-color);
-            width: var(--tablereact-vtc-grip-width);
-            right: var(--tablereact-vtc-grip-right);
+            width: var(--vtc-scrollbar-grip-width);
+            right: var(--vtc-scrollbar-grip-right);
             transition: background-color 0.5s, width 0.5s;
 
             top: 20px;
             height: 30px;
-        }        
+        }   
+        .scrollbar:hover .grip {
+            width: 100%;
+        }
+        .scrollbar:active .grip {
+            width: 100%;
+        }
+        .grip:hover {
+            background-color: var(--vtc-scrollbar-grip-hover-color);
+        }
+        .grip:active {
+            background-color: var(--vtc-scrollbar-grip-active-color);
+            transition: background-color 0s;
+        }             
     </style>
     <div class="tableroot">
         <table>

@@ -67,3 +67,6 @@ changeCols.addEventListener("click", () => {
 })
 
 // TODO: SubColumn, sortable
+// TODO: array[0..1000].map(name+i), setItems (with columns and id), display name
+// TODO: Scolling
+// TODO: Theming
