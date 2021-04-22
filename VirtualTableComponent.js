@@ -303,6 +303,14 @@ class VirtualTableComponent extends HTMLElement {
             }
         }
 
+        window.addEventListener('resize', () => {
+            if (!this.resizeTimer && this.items)
+                this.resizeTimer = setTimeout(() => {
+                    this.resizeTimer = 0
+                    this.itemsPerPage = Math.floor(this.tableroot.clientHeight / this.itemHeight)
+                    this.renderItems()
+                }, 100)
+        })
         this.headRow.addEventListener('mousemove', onMouseMove)
         this.headRow.addEventListener('mouseleave', () => {
             this.draggingReady = false
@@ -409,7 +417,6 @@ class VirtualTableComponent extends HTMLElement {
         if (!this.itemHeight) 
             this.measureItemHeight()
         this.itemsPerPage = Math.floor(this.tableroot.clientHeight / this.itemHeight)
-        console.log("itemsPerPage", this.itemsPerPage)
         this.renderItems()
     }
     
