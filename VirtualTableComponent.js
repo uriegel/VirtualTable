@@ -197,6 +197,7 @@ class VirtualTableComponent extends HTMLElement {
         this.attachShadow({ mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
+        this.tableroot = this.shadowRoot.querySelector('.tableroot')
         this.headRow = this.shadowRoot.querySelector('thead>tr')
         this.tableBody = this.shadowRoot.querySelector('tbody')
         this.scrollbar = this.shadowRoot.querySelector('.scrollbar')
