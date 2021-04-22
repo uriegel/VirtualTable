@@ -194,6 +194,7 @@ template.innerHTML = `
 class VirtualTableComponent extends HTMLElement {
     constructor() {
         super()
+        this.scrollPosition = 0
         this.attachShadow({ mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
@@ -393,8 +394,22 @@ class VirtualTableComponent extends HTMLElement {
         })
     }
 
+    measureItemHeight() {
+        const tr = document.createElement('tr')
+        const td = document.createElement('td')
+        this.columns[0].render(td, this.items[0])
+        tr.appendChild(td)
+        this.tableBody.appendChild(tr)
+        this.itemHeight = tr.offsetHeight
+        this.tableBody.removeChild(tr)
+    }
+
     setItems(items) {
         this.items = items
+        if (!this.itemHeight) 
+            this.measureItemHeight()
+        this.itemsPerPage = Math.floor(this.tableroot.clientHeight / this.itemHeight)
+        console.log("itemsPerPage", this.itemsPerPage)
         this.renderItems()
     }
     
@@ -402,16 +417,18 @@ class VirtualTableComponent extends HTMLElement {
         let last
         while (last = this.tableBody.lastChild) 
             this.tableBody.removeChild(last)
-        
-        this.items.forEach(item => {
-            const tr = this.renderItem(item)
+
+        for (let i = this.scrollPosition; 
+                i < Math.min(this.itemsPerPage, this.items.length - this.scrollPosition);
+                i++) {
+            const tr = this.renderItem(this.items[i])
             this.tableBody.appendChild(tr)
-        })
+        }
     }
 
     renderItem(item) {
         const tr = document.createElement('tr')
-        this.columns.forEach((col, index) => {
+        this.columns.forEach(col => {
             const td = document.createElement('td')
             col.render(td, item)
             tr.appendChild(td)

@@ -86,9 +86,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: measureItemHeight
-// TODO: measureItemsPerPage
-// TODO: resize table
+// TODO: resize table: eventhandler timeout: set itemsPerPage, render
 // TODO: Scolling: scrollpPosition range
 // TODO: Scolling: repeat
 // TODO: Column right aligned
