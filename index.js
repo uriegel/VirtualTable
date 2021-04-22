@@ -31,19 +31,33 @@ const widthstr = localStorage.getItem("widths")
 const widths = widthstr ? JSON.parse(widthstr) : []
 let columns = [{
     name: "Name",
-    isSortable: true
+    isSortable: true,
+    render: (td, item) => td.innerHTML = item.name
 }, {
     name: "Ext.",
+    render: (td, item) => td.innerHTML = item.ext
 }, {
     name: "Datum",
-    isSortable: true
+    isSortable: true,
+    render: (td, item) => td.innerHTML = item.date
 }, {
     name: "Größe",
-    isSortable: true
+    isSortable: true,
+    render: (td, item) => td.innerHTML = item.size
 }]
 if (widths)
     columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
+    
 table.setColumns(columns)
+const items = Array.from(Array(40).keys())
+    .map(index => ({
+        name: "Eintrag " + index,
+        ext: "ext",
+        date: "24.03.1999 14:23",
+        size: 2344 + index
+    }))
+table.setItems(items)
+
 
 var saveWidths = true
 table.addEventListener("columnwidths", e => {
@@ -72,6 +86,5 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: array[0..1000].map(name+i), setItems (with columns and id), display name
 // TODO: Scolling
 // TODO: Theming

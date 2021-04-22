@@ -171,18 +171,7 @@ template.innerHTML = `
             <thead>
                 <tr></tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Eintr. 1</td>
-                    <td>Eintr. 2</td>
-                    <td>Eintr. 3</td>
-                </tr>
-                <tr>
-                    <td>Eintr. 1.1</td>
-                    <td>Eintr. 2.1</td>
-                    <td>Eintr. 3.1</td>
-                </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="scrollbar">
@@ -209,6 +198,7 @@ class VirtualTableComponent extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
         this.headRow = this.shadowRoot.querySelector('thead>tr')
+        this.tableBody = this.shadowRoot.querySelector('tbody')
         this.scrollbar = this.shadowRoot.querySelector('.scrollbar')
     }
 
@@ -400,6 +390,32 @@ class VirtualTableComponent extends HTMLElement {
             this.headRow.appendChild(th)
             this.scrollbar.style.height = `calc(100% - ${this.headRow.clientHeight}px)` 
         })
+    }
+
+    setItems(items) {
+        this.items = items
+        this.renderItems()
+    }
+    
+    renderItems() {
+        let last
+        while (last = this.tableBody.lastChild) 
+            this.tableBody.removeChild(last)
+        
+        this.items.forEach(item => {
+            const tr = this.renderItem(item)
+            this.tableBody.appendChild(tr)
+        })
+    }
+
+    renderItem(item) {
+        const tr = document.createElement('tr')
+        this.columns.forEach((col, index) => {
+            const td = document.createElement('td')
+            col.render(td, item)
+            tr.appendChild(td)
+        }) 
+        return tr
     }
 }
 
