@@ -86,7 +86,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: resize: adapt gripheight
 // TODO: Scolling: scrollPosition range
 // TODO: Scolling: repeat
 // TODO: Column right aligned

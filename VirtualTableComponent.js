@@ -102,7 +102,11 @@ template.innerHTML = `
             display: flex;
             flex-direction: column;  
             transition: transform 0.3s;  
+            transform-origin: right top;
             bottom: 0px;
+        }
+        .scrollbar.hidden {
+            transform: scale(0)
         }
         .svg {
             display: var(--vtc-scrollbar-button-display);
@@ -148,9 +152,6 @@ template.innerHTML = `
             width: var(--vtc-scrollbar-grip-width);
             right: var(--vtc-scrollbar-grip-right);
             transition: background-color 0.5s, width 0.5s;
-
-            top: 20px;
-            height: 30px;
         }   
         .scrollbar:hover .grip {
             width: 100%;
@@ -174,7 +175,7 @@ template.innerHTML = `
             <tbody></tbody>
         </table>
     </div>
-    <div class="scrollbar">
+    <div class="scrollbar hidden">
         <svg class="svg" viewBox="0 0 100 100" >
             <path class="button" d="M 20,70 50,30 80,70 Z" / >
         </svg>
@@ -202,6 +203,8 @@ class VirtualTableComponent extends HTMLElement {
         this.headRow = this.shadowRoot.querySelector('thead>tr')
         this.tableBody = this.shadowRoot.querySelector('tbody')
         this.scrollbar = this.shadowRoot.querySelector('.scrollbar')
+        this.scrollbarElement = this.shadowRoot.querySelector('.scrollbarElement')
+        this.scrollbarGrip = this.shadowRoot.querySelector('.scrollbarElement>div')
     }
 
     connectedCallback() {
@@ -307,9 +310,10 @@ class VirtualTableComponent extends HTMLElement {
             if (!this.resizeTimer && this.items)
                 this.resizeTimer = setTimeout(() => {
                     this.resizeTimer = 0
-                    this.itemsPerPage = Math.floor(this.tableroot.clientHeight / this.itemHeight)
+                    this.measureItemsPerPage()
+                    this.renderScrollbarGrip()
                     this.renderItems()
-                }, 100)
+                }, 50)
         })
         this.headRow.addEventListener('mousemove', onMouseMove)
         this.headRow.addEventListener('mouseleave', () => {
@@ -402,6 +406,8 @@ class VirtualTableComponent extends HTMLElement {
         })
     }
 
+    measureItemsPerPage() { this.itemsPerPage = Math.floor((this.tableroot.clientHeight - this.headRow.clientHeight) / this.itemHeight) }
+    
     measureItemHeight() {
         const tr = document.createElement('tr')
         const td = document.createElement('td')
@@ -416,8 +422,9 @@ class VirtualTableComponent extends HTMLElement {
         this.items = items
         if (!this.itemHeight) 
             this.measureItemHeight()
-        this.itemsPerPage = Math.floor(this.tableroot.clientHeight / this.itemHeight)
+            this.measureItemsPerPage()
         this.renderItems()
+        this.renderScrollbarGrip()
     }
     
     renderItems() {
@@ -426,7 +433,7 @@ class VirtualTableComponent extends HTMLElement {
             this.tableBody.removeChild(last)
 
         for (let i = this.scrollPosition; 
-                i < Math.min(this.itemsPerPage, this.items.length - this.scrollPosition);
+                i < Math.min(this.itemsPerPage + 1, this.items.length - this.scrollPosition);
                 i++) {
             const tr = this.renderItem(this.items[i])
             this.tableBody.appendChild(tr)
@@ -441,6 +448,15 @@ class VirtualTableComponent extends HTMLElement {
             tr.appendChild(td)
         }) 
         return tr
+    }
+
+    renderScrollbarGrip() {
+		const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), 10)
+        this.scrollbarGrip.style.height = `${gripHeight}px`
+        if (this.itemsPerPage >= this.items.length)
+            this.scrollbar.classList.add('hidden')
+        else
+            this.scrollbar.classList.remove('hidden')
     }
 }
 
