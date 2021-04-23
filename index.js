@@ -86,6 +86,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
+// TODO: resize column cursor
 // TODO: Scolling: scrollPosition range
 // TODO: Scolling: repeat
 // TODO: Column right aligned

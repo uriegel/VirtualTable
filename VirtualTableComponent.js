@@ -205,6 +205,18 @@ class VirtualTableComponent extends HTMLElement {
         this.scrollbar = this.shadowRoot.querySelector('.scrollbar')
         this.scrollbarElement = this.shadowRoot.querySelector('.scrollbarElement')
         this.scrollbarGrip = this.shadowRoot.querySelector('.scrollbarElement>div')
+
+        const buttons = this.shadowRoot.querySelectorAll('svg')
+        const upButton = buttons[0]
+        const downButton = buttons[1]
+        upButton.onclick = () => {
+            this.scrollPosition = Math.max(this.scrollPosition - 1, 0)
+            this.render()
+        }
+        downButton.onclick = () => {
+            this.scrollPosition = Math.min(this.scrollPosition + 1, this.items.length || 0)
+            this.render()
+        }
     }
 
     connectedCallback() {
@@ -354,7 +366,7 @@ class VirtualTableComponent extends HTMLElement {
                         .forEach(n => {
                             if (n.firstChild.firstChild) {
                                 remove(n.firstChild.firstChild)
-                                remove(n.firstChild.children[1])
+                                remove(n.firstChild.lastChild)
                             }
                             else
                                 remove(n)
@@ -362,7 +374,7 @@ class VirtualTableComponent extends HTMLElement {
                     let descending = false
                     
                     let element = th.firstChild.firstChild 
-                        ? subItem ? th.firstChild.children[1] : th.firstChild.firstChild 
+                        ? subItem ? th.firstChild.lastChild : th.firstChild.firstChild 
                         : th
                     if (element.classList.contains("sortAscending")) {
                         element.classList.remove("sortAscending")
@@ -373,7 +385,7 @@ class VirtualTableComponent extends HTMLElement {
                         element.classList.add("sortAscending")
                     }
                     if (th.firstChild.firstChild) {
-                        let element = subItem ? th.firstChild.firstChild : th.firstChild.children[1]
+                        let element = subItem ? th.firstChild.firstChild : th.firstChild.lastChild
                         remove(element)
                     }
 
@@ -423,6 +435,10 @@ class VirtualTableComponent extends HTMLElement {
         if (!this.itemHeight) 
             this.measureItemHeight()
             this.measureItemsPerPage()
+        this.render()    
+    }
+
+    render() {
         this.renderItems()
         this.renderScrollbarGrip()
     }
@@ -433,7 +449,7 @@ class VirtualTableComponent extends HTMLElement {
             this.tableBody.removeChild(last)
 
         for (let i = this.scrollPosition; 
-                i < Math.min(this.itemsPerPage + 1, this.items.length - this.scrollPosition);
+                i < Math.min(this.itemsPerPage + 1 + this.scrollPosition, this.items.length);
                 i++) {
             const tr = this.renderItem(this.items[i])
             this.tableBody.appendChild(tr)
@@ -451,9 +467,10 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     renderScrollbarGrip() {
-		const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), 10)
+        this.scrollbarGrip.style.top = this.scrollPosition * this.itemHeight
+        const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), 10)
         this.scrollbarGrip.style.height = `${gripHeight}px`
-        if (this.itemsPerPage >= this.items.length)
+        if (this.itemsPerPage >= this.items.length - this.scrollPosition)
             this.scrollbar.classList.add('hidden')
         else
             this.scrollbar.classList.remove('hidden')
