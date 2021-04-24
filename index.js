@@ -86,7 +86,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Scrolling: page up/down
 // TODO: Scrolling: grip scrolling
 // TODO: Scrolling: size change
 // TODO: Scrolling: Mouse wheel
