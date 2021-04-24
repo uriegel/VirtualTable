@@ -192,6 +192,19 @@ template.innerHTML = `
  * @property {string} title Title of column
  */
 
+ const mouseRepeat = action => {
+    action()
+    let interval = 0
+    const timeout = setTimeout(() => interval = setInterval(() => action(), 50), 600)
+    const mouseUp = () => {
+        window.removeEventListener("mouseup", mouseUp)
+        clearTimeout(timeout)
+        if (interval)
+            clearInterval(interval)
+    }
+    window.addEventListener("mouseup", mouseUp)
+}
+
 class VirtualTableComponent extends HTMLElement {
     constructor() {
         super()
@@ -207,16 +220,8 @@ class VirtualTableComponent extends HTMLElement {
         this.scrollbarGrip = this.shadowRoot.querySelector('.scrollbarElement>div')
 
         const buttons = this.shadowRoot.querySelectorAll('svg')
-        const upButton = buttons[0]
-        const downButton = buttons[1]
-        upButton.onclick = () => {
-            this.scrollPosition = Math.max(this.scrollPosition - 1, 0)
-            this.render()
-        }
-        downButton.onclick = () => {
-            this.scrollPosition = Math.min(this.scrollPosition + 1, this.items.length || 0)
-            this.render()
-        }
+        this.upButton = buttons[0]
+        this.downButton = buttons[1]
     }
 
     connectedCallback() {
@@ -323,8 +328,7 @@ class VirtualTableComponent extends HTMLElement {
                 this.resizeTimer = setTimeout(() => {
                     this.resizeTimer = 0
                     this.measureItemsPerPage()
-                    this.renderScrollbarGrip()
-                    this.renderItems()
+                    this.render()
                 }, 50)
         })
         this.headRow.addEventListener('mousemove', onMouseMove)
@@ -333,6 +337,15 @@ class VirtualTableComponent extends HTMLElement {
             document.body.style.cursor = 'auto'
         })        
         this.headRow.addEventListener('mousedown', onMouseDown)
+
+        this.upButton.onmousedown = () => mouseRepeat(() => {
+            this.scrollPosition = Math.max(this.scrollPosition - 1, 0)
+            this.render()
+        })
+        this.downButton.onmousedown = () => mouseRepeat(() => {
+            this.scrollPosition = Math.min(this.scrollPosition + 1, this.items.length - this.itemsPerPage || 0)
+            this.render()
+        })
     }
 
     /**
@@ -467,10 +480,11 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     renderScrollbarGrip() {
-        this.scrollbarGrip.style.top = this.scrollPosition * this.itemHeight
+        const range = Math.max(0, this.items.length - this.itemsPerPage) + 1
         const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), 10)
+        this.scrollbarGrip.style.top = (this.scrollbarElement.clientHeight - gripHeight) * (this.scrollPosition / (range -1))
         this.scrollbarGrip.style.height = `${gripHeight}px`
-        if (this.itemsPerPage >= this.items.length - this.scrollPosition)
+        if (this.itemsPerPage > this.items.length - 1)
             this.scrollbar.classList.add('hidden')
         else
             this.scrollbar.classList.remove('hidden')
