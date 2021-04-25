@@ -90,7 +90,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Scrollbar: Theming
 // TODO: icon view in first column
 // TODO: icon view as svg in first column
 // TODO: CurrentPosition

@@ -22,7 +22,9 @@ template.innerHTML = `
             --vtc-scrollbar-grip-color: rgb(209, 209, 209); 
             --vtc-scrollbar-grip-hover-color: #bbb;
             --vtc-scrollbar-grip-active-color: #999;
-            --vtc-scrollbar-grip-width: 100%;
+            --vtc-scrollbar-grip-right: 0px;
+            --vtc-scrollbar-grip-width: calc(100% - var(--vtc-scrollbar-grip-right));
+            --vtc-scrollbar-right-margin: 15px;
         }
         .tableroot {
             position: absolute;
@@ -68,7 +70,7 @@ template.innerHTML = `
             border-left-width: 0px;
         }
         .tableroot.scrollbarActive td:last-child {
-            padding-right: calc(3px + var(--vtc-scrollbar-width));
+            padding-right: calc(3px + var(--vtc-scrollbar-right-margin));
         }
         .rightAligned {
             text-align: right;  
@@ -162,10 +164,10 @@ template.innerHTML = `
             transition: background-color 0.5s, width 0.5s;
         }   
         .scrollbar:hover .grip {
-            width: 100%;
+            width: calc(100% - var(--vtc-scrollbar-grip-right));
         }
         .scrollbar:active .grip {
-            width: 100%;
+            width: calc(100% - var(--vtc-scrollbar-grip-right));
         }
         .grip:hover {
             background-color: var(--vtc-scrollbar-grip-hover-color);
