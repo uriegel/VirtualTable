@@ -5,6 +5,11 @@
     --vtc-caption-background-color: #eff0f1;
     --vtc-caption-background-hover-color: #e2e2e2;
     --vtc-caption-separator-color: #737373;
+
+    --vtc-scrollbar-button-display: none;
+    --vtc-scrollbar-width: 12px;
+    --vtc-scrollbar-border-width: 0px;
+    --vtc-scrollbar-grip-width: 4px;
 }
 .isSortable:hover {
     background-color: var(--tablereact-selected-background-hover-color    

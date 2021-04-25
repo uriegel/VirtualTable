@@ -6,6 +6,8 @@
     --vtc-caption-background-color: #353535;
     --vtc-caption-background-hover-color: #464646;
     --vtc-caption-separator-color: #737373;
+
+    --vtc-scrollbar-button-display: none;
 }
 
 body.themeAdwaitaDark {

@@ -457,6 +457,12 @@ class VirtualTableComponent extends HTMLElement {
         this.render()    
     }
 
+    themeChanged() {
+        this.measureItemHeight()
+        this.measureItemsPerPage()
+        this.render()    
+    }
+
     measureItemsPerPage() { this.itemsPerPage = Math.floor((this.tableroot.clientHeight - this.headRow.clientHeight) / this.itemHeight) }
     
     measureItemHeight() {

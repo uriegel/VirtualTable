@@ -12,6 +12,7 @@ themeChooser.onchange = () => {
         })
         document.body.classList.add(theme)    
         table.classList.add(theme)    
+        table.themeChanged()
     }
 
     switch (themeChooser.selectedIndex) {
