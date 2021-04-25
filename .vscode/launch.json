@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'testserver'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=testserver",
+                    "--package=testserver"
+                ],
+                "filter": {
+                    "name": "testserver",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "relativePathBase": "testserver",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

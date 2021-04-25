@@ -44,7 +44,7 @@ template.innerHTML = `
             user-select: none;
             transition: padding-right .4s;
         }            
-        thead {
+        thead { 
             color: var(--vtc-caption-color);
             background-color: var(--vtc-caption-background-color);
         }
