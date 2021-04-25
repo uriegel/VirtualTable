@@ -57,6 +57,7 @@ template.innerHTML = `
             border-left-width: 1px;
             border-left-color: var(--vtc-caption-separator-color);
             padding-left: 5px;
+            padding-right: 5px;
             overflow: hidden;
             white-space: nowrap;
             -webkit-user-select: none;            
@@ -64,6 +65,12 @@ template.innerHTML = `
         }
         th:first-child {
             border-left-width: 0px;
+        }
+        .tableroot.scrollbarActive td:last-child {
+            padding-right: calc(3px + var(--vtc-scrollbar-width));
+        }
+        .rightAligned {
+            text-align: right;  
         }
         .isSortable {
             transition: background-color 0.3s; 
@@ -414,6 +421,8 @@ class VirtualTableComponent extends HTMLElement {
                     this.dispatchEvent(new CustomEvent('columclick', { detail: { column: i, descending, subItem } }))
                 }
             }
+            if (n.isRightAligned)
+                th.classList.add("rightAligned")
             if (!n.subItem) {
                 th.innerHTML = n.name
                 if (n.isSortable)
@@ -440,6 +449,14 @@ class VirtualTableComponent extends HTMLElement {
         })
     }
 
+    setItems(items) {
+        this.items = items
+        if (!this.itemHeight) 
+            this.measureItemHeight()
+            this.measureItemsPerPage()
+        this.render()    
+    }
+
     measureItemsPerPage() { this.itemsPerPage = Math.floor((this.tableroot.clientHeight - this.headRow.clientHeight) / this.itemHeight) }
     
     measureItemHeight() {
@@ -450,14 +467,6 @@ class VirtualTableComponent extends HTMLElement {
         this.tableBody.appendChild(tr)
         this.itemHeight = tr.offsetHeight
         this.tableBody.removeChild(tr)
-    }
-
-    setItems(items) {
-        this.items = items
-        if (!this.itemHeight) 
-            this.measureItemHeight()
-            this.measureItemsPerPage()
-        this.render()    
     }
 
     onPageMouseDown(evt) {
@@ -539,6 +548,9 @@ class VirtualTableComponent extends HTMLElement {
         const tr = document.createElement('tr')
         this.columns.forEach(col => {
             const td = document.createElement('td')
+            if (col.isRightAligned)
+                td.classList.add("rightAligned")
+            td.classList.add()
             col.render(td, item)
             tr.appendChild(td)
         }) 
@@ -550,10 +562,14 @@ class VirtualTableComponent extends HTMLElement {
         const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), 10)
         this.scrollbarGrip.style.top = (this.scrollbarElement.clientHeight - gripHeight) * (this.scrollPosition / (range -1))
         this.scrollbarGrip.style.height = `${gripHeight}px`
-        if (this.itemsPerPage > this.items.length - 1)
+        if (this.itemsPerPage > this.items.length - 1) {
             this.scrollbar.classList.add('hidden')
-        else
+            this.tableroot.classList.remove('scrollbarActive')
+        }
+        else {
             this.scrollbar.classList.remove('hidden')
+            this.tableroot.classList.add('scrollbarActive')
+        }
     }
 }
 
