@@ -5,6 +5,7 @@ template.innerHTML = `
             --vtc-color: black;
             --vtc-background-color: white;
             --vtc-caption-color: white;
+            --vtc-selected-background-color: blue;
             --vtc-caption-background-color: blue;
             --vtc-caption-background-hover-color: #0063ff;
             --vtc-caption-separator-color: white;
