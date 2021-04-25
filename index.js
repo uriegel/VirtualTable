@@ -43,7 +43,10 @@ let columns = [{
 }, {
     name: "Größe",
     isSortable: true,
-    render: (td, item) => td.innerHTML = item.size
+    render: (td, item) => {
+        td.innerHTML = item.size
+        td.classList.add("rightAligned")
+    }
 }]
 if (widths)
     columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
@@ -85,7 +88,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Column right aligned
+// TODO: Column right aligned: text-align: right;  padding-right: 18px;
 // TODO: Scrollbar: Theming
 // TODO: icon view in first column
 // TODO: icon view as svg in first column

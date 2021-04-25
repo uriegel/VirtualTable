@@ -327,10 +327,13 @@ class VirtualTableComponent extends HTMLElement {
             if (!this.resizeTimer && this.items)
                 this.resizeTimer = setTimeout(() => {
                     this.resizeTimer = 0
+                    const lastItemsPerPage = this.itemsPerPage
                     this.measureItemsPerPage()
-                    if (this.scrollPosition > this.items.length - this.itemsPerPage) 
-                        this.scrollPosition = Math.max(this.items.length - this.itemsPerPage, 0)
-                    this.render()
+                    if (lastItemsPerPage != this.itemsPerPage) {
+                        if (this.scrollPosition > this.items.length - this.itemsPerPage) 
+                            this.scrollPosition = Math.max(this.items.length - this.itemsPerPage, 0)
+                        this.render()
+                    }
                 }, 50)
         })
         this.headRow.addEventListener('mousemove', onMouseMove)
