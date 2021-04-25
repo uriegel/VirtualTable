@@ -349,6 +349,7 @@ class VirtualTableComponent extends HTMLElement {
 
         this.scrollbarElement.onmousedown = evt => this.onPageMouseDown(evt)
         this.scrollbarGrip.onmousedown = evt => this.onGripMouseDown(evt)
+        this.tableroot.onwheel = evt => this.onWheel(evt)
     }
 
     /**
@@ -496,6 +497,19 @@ class VirtualTableComponent extends HTMLElement {
 
         evt.preventDefault()
         evt.stopPropagation()
+    }
+
+    onWheel(evt) {
+		if (this.items.length > this.itemsPerPage) {
+			var delta = evt.deltaY / Math.abs(evt.deltaY) * 3
+			let newPos = this.scrollPosition + delta
+			if (newPos < 0)
+				newPos = 0
+			if (newPos > this.items.length - this.itemsPerPage) 
+				newPos = this.items.length - this.itemsPerPage 
+            this.scrollPosition = newPos
+            this.render()
+		}        
     }
 
     render() {

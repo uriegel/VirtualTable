@@ -86,7 +86,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Scrolling: Mouse wheel
 // TODO: Scrolling: size change
 // TODO: Column right aligned
 // TODO: Theming
