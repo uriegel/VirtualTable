@@ -49,7 +49,7 @@ if (widths)
     columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
     
 table.setColumns(columns)
-const items = Array.from(Array(40).keys())
+const items = Array.from(Array(4000).keys())
     .map(index => ({
         name: "Eintrag " + index,
         ext: "ext",
@@ -86,8 +86,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Scrolling: grip scrolling
-// TODO: Scrolling: size change
 // TODO: Scrolling: Mouse wheel
+// TODO: Scrolling: size change
 // TODO: Column right aligned
 // TODO: Theming

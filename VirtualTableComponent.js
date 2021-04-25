@@ -456,9 +456,9 @@ class VirtualTableComponent extends HTMLElement {
 
     onPageMouseDown(evt) {
         const offsetY = evt.offsetY
+        const gripTop = this.scrollbarGrip.offsetTop
 		const gripHeight = this.scrollbarGrip.clientHeight
         const range = Math.max(0, this.items.length - this.itemsPerPage) + 1
-        const gripTop = this.scrollbarGrip.offsetTop
         const isUp = offsetY <= gripTop
         
 		const action = () => {
@@ -474,6 +474,26 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     onGripMouseDown(evt) {
+		const gripTop = this.scrollbarGrip.offsetTop
+        const gripHeight = this.scrollbarGrip.clientHeight
+		const startPos = evt.y - gripTop
+		const range = this.scrollbarElement.clientHeight - gripHeight
+		const maxPosition = this.items.length - this.itemsPerPage
+		const onmove = evt => {
+			const delta = evt.y - startPos
+			const factor = Math.min(1, (Math.max(0, delta * 1.0 / range)))
+			this.scrollPosition = Math.floor(factor * maxPosition)
+            this.render()
+			evt.preventDefault()
+			evt.stopPropagation()
+		}
+		const onup = () => {
+			window.removeEventListener('mousemove', onmove, true)
+			window.removeEventListener('mouseup', onup, true)
+		}
+		window.addEventListener('mousemove', onmove, true)
+		window.addEventListener('mouseup', onup, true)
+
         evt.preventDefault()
         evt.stopPropagation()
     }
