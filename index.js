@@ -49,7 +49,7 @@ if (widths)
     columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
     
 table.setColumns(columns)
-const items = Array.from(Array(4000).keys())
+const items = Array.from(Array(40).keys())
     .map(index => ({
         name: "Eintrag " + index,
         ext: "ext",
@@ -57,7 +57,6 @@ const items = Array.from(Array(4000).keys())
         size: 2344 + index
     }))
 table.setItems(items)
-
 
 var saveWidths = true
 table.addEventListener("columnwidths", e => {
@@ -86,6 +85,13 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Scrolling: size change
 // TODO: Column right aligned
-// TODO: Theming
+// TODO: Scrollbar: Theming
+// TODO: icon view in first column
+// TODO: icon view as svg in first column
+// TODO: CurrentPosition
+// TODO: changing currentIndex with scrolling 
+// TODO: Selection, control in host
+// TODO: Restriction 
+
+

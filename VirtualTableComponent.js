@@ -328,6 +328,8 @@ class VirtualTableComponent extends HTMLElement {
                 this.resizeTimer = setTimeout(() => {
                     this.resizeTimer = 0
                     this.measureItemsPerPage()
+                    if (this.scrollPosition > this.items.length - this.itemsPerPage) 
+                        this.scrollPosition = Math.max(this.items.length - this.itemsPerPage, 0)
                     this.render()
                 }, 50)
         })
