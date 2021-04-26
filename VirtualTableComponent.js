@@ -176,6 +176,15 @@ template.innerHTML = `
             background-color: var(--vtc-scrollbar-grip-active-color);
             transition: background-color 0s;
         }             
+        .svgImage {
+            width: 16px;
+            height: 16px;
+            vertical-align: bottom;
+            margin-right: 3px;	
+        }
+        .svgImagePath {
+            fill: var(--vtc-item-img-color);   
+        }
     </style>
     <div class="tableroot">
         <table>

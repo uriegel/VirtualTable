@@ -37,7 +37,13 @@ const widths = widthstr ? JSON.parse(widthstr) : []
 let columns = [{
     name: "Name",
     isSortable: true,
-    render: (td, item) => td.innerHTML = item.name
+    render: (td, item) => {
+        var t = document.querySelector('#folder')
+        td.appendChild(document.importNode(t.content, true))
+        const span = document.createElement('span')
+        span.innerHTML = item.name
+        td.appendChild(span)
+    }
 }, {
     name: "Ext.",
     render: (td, item) => td.innerHTML = item.ext
@@ -97,8 +103,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: icon view in first column
-// TODO: icon view as svg in first column
 // TODO: CurrentPosition
 // TODO: changing currentIndex with scrolling 
 // TODO: Selection, control in host
