@@ -9,6 +9,9 @@ template.innerHTML = `
             --vtc-caption-background-color: blue;
             --vtc-caption-background-hover-color: #0063ff;
             --vtc-caption-separator-color: white;
+            --vtc-item-selected-color: lightgray;
+            --vtc-item-selected-focus-color: red;
+        
             --vtc-font-size: 100%;
             --vtc-scrollbar-width: 16px;
             --vtc-scrollbar-border-color: gray;
@@ -71,6 +74,15 @@ template.innerHTML = `
         }
         .tableroot.scrollbarActive td:last-child {
             padding-right: calc(3px + var(--vtc-scrollbar-right-margin));
+        }
+        .isCurrent {
+            outline-color: var(--vtc-item-selected-color);
+            outline-width: 1px;
+            outline-style: solid;
+            outline-offset: -1px;
+        }
+        .tableroot:focus .isCurrent {
+            outline-color: var(--vtc-item-selected-focus-color);
         }
         .rightAligned {
             text-align: right;  
@@ -186,7 +198,7 @@ template.innerHTML = `
             fill: var(--vtc-item-img-color);   
         }
     </style>
-    <div class="tableroot">
+    <div class="tableroot" tabIndex=1>
         <table>
             <thead>
                 <tr></tr>
@@ -466,6 +478,7 @@ class VirtualTableComponent extends HTMLElement {
         if (!this.itemHeight) 
             this.measureItemHeight()
             this.measureItemsPerPage()
+        this.position = 0
         this.render()    
     }
 
@@ -546,6 +559,7 @@ class VirtualTableComponent extends HTMLElement {
 
     render() {
         this.renderItems()
+        this.renderCurrentItem(0)
         this.renderScrollbarGrip()
     }
     
@@ -573,6 +587,11 @@ class VirtualTableComponent extends HTMLElement {
             tr.appendChild(td)
         }) 
         return tr
+    }
+
+    renderCurrentItem() {
+        if (this.position >= this.scrollPosition && this.position < this.scrollPosition + this.itemsPerPage) 
+            this.tableBody.children[this.position - this.scrollPosition].classList.add("isCurrent")
     }
 
     renderScrollbarGrip() {
