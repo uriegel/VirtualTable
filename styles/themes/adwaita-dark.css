@@ -1,5 +1,7 @@
 :root .themeAdwaitaDark {
     background-color: rgb(94, 94, 94);
+    --exif-color: rgb(255, 255, 173);
+
     --vtc-color: white;
     --vtc-background-color: #2f2f2f;
     --vtc-caption-color: #dddddd;

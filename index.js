@@ -30,6 +30,8 @@ themeChooser.onchange = () => {
     }
 }
 
+var exifColor = getComputedStyle(document.body).getPropertyValue('--exif-color') 
+
 const widthstr = localStorage.getItem("widths")
 const widths = widthstr ? JSON.parse(widthstr) : []
 let columns = [{
@@ -94,8 +96,6 @@ changeCols.addEventListener("click", () => {
     }])
 
 })
-
-var exifColor
 
 // TODO: icon view in first column
 // TODO: icon view as svg in first column
