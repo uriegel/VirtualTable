@@ -11,6 +11,8 @@ themeChooser.onchange = () => {
             table.classList.remove(n)    
         })
         document.body.classList.add(theme)    
+        const style = getComputedStyle(document.body)
+        exifColor = style.getPropertyValue('--exif-color') 
         table.classList.add(theme)    
         table.themeChanged()
     }
@@ -40,7 +42,10 @@ let columns = [{
 }, {
     name: "Datum",
     isSortable: true,
-    render: (td, item) => td.innerHTML = item.date
+    render: (td, item) => {
+        td.innerHTML = item.date
+        td.style.color = exifColor
+    }
 }, {
     name: "Größe",
     isSortable: true,
@@ -89,6 +94,8 @@ changeCols.addEventListener("click", () => {
     }])
 
 })
+
+var exifColor
 
 // TODO: icon view in first column
 // TODO: icon view as svg in first column

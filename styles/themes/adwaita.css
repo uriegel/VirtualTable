@@ -1,5 +1,7 @@
 :root .themeAdwaita {
     background-color: darkgrey;
+    --exif-color: darkblue;
+    
     --vtc-background-color: #fcfcfc;
     --vtc-caption-color: #737373;
     --vtc-caption-background-color: #eff0f1;
@@ -16,7 +18,6 @@
     --vtc-scrollbar-grip-right: 1px;
     --vtc-scrollbar-right-margin: 6px;
 }
-.isSortable:hover {
-    background-color: var(--tablereact-selected-background-hover-color    
-}
+
+
 
