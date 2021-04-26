@@ -6,7 +6,9 @@ async fn main() {
     println!("Running test server on http://localhost:{}", port);
 
     let route1 = warp::path!("hello" / String)
-    .map(|name| format!("Hello, {}!", name));
+    .map(|name| {
+        format!("Hello, {}!", name)
+    });
 
     //let route1 = warp::path("web").and(warp::fs::dir("/home/uwe/Projekte/WebComponents"));
     let route2 = warp::fs::dir("/home/uwe/Projekte/VirtualTableComponent");
