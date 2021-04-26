@@ -1,6 +1,16 @@
 {
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        {
+            "type": "by-gdb",
+            "request": "launch",
+            "name": "Launch(gdb)",
+            "program": "target/debug/testserver",
+            "cwd": "${workspaceRoot}"
+        },
         {
             "type": "lldb",
             "request": "launch",
@@ -17,7 +27,25 @@
                 }
             },
             "args": [],
-            "relativePathBase": "testserver",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'testserver'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=testserver",
+                    "--package=testserver"
+                ],
+                "filter": {
+                    "name": "testserver",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
             "cwd": "${workspaceFolder}"
         }
     ]
