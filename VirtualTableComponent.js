@@ -594,12 +594,16 @@ class VirtualTableComponent extends HTMLElement {
         this.position = delta > 0 
             ? Math.min(this.position + delta, this.items.length - 1)
             : Math.max(this.position + delta, 0)
-        if (scrollIntoView) 
-            this.scrollPosition += delta > 0 
-                // TODO: delta > 0 and scrollposition too small
-                // TODO: delta < 0 and scrollposition too large
+        if (scrollIntoView) {
+            const down = delta > 0
+            this.scrollPosition += down 
                 ? Math.max(0, this.position - this.scrollPosition - this.itemsPerPage + 1)
                 : - Math.max(0, this.scrollPosition - this.position)
+            if (down && this.position - this.scrollPosition < 0)
+                this.scrollPosition = this.position
+            if (!down && this.position - this.scrollPosition - this.itemsPerPage + 1 >= 0)
+                this.scrollPosition = this.position - this.itemsPerPage + 1
+        }
     }
 
     render() {
