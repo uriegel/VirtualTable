@@ -16,6 +16,7 @@ template.innerHTML = `
             --vtc-scrollbar-width: 16px;
             --vtc-scrollbar-border-color: gray;
             --vtc-scrollbar-border-width: 1px;
+            --vtc-scrollbar-background-color: white;
             --vtc-scrollbar-button-background-color: white;
             --vtc-scrollbar-button-color: #666;
             --vtc-scrollbar-button-hover-color: #555
@@ -150,16 +151,9 @@ template.innerHTML = `
         }
         .scrollbarElement {
             background-color: var(--vtc-scrollbar-background-color);
-            transition: background-color 1s;
             flex-grow: 1;
             position: relative;	
         }
-        .scrollbarElement:hover {
-            background-color: var(--vtc-scrollbar-background-hover-color);
-        }
-        .scrollbarElement:active {
-            background-color: var(--vtc-scrollbar-background-hover-color);
-        }        
         .svg:hover .button {
             fill: var(--vtc-scrollbar-button-hover-color); 
         }
@@ -343,6 +337,7 @@ class VirtualTableComponent extends HTMLElement {
                     document.body.style.cursor = 'auto'
                     
                     this.dispatchEvent(new CustomEvent('columnwidths', { detail: getWidths() }))
+                    this.setFocus()
                     evt.preventDefault()
                     evt.stopPropagation()
                 }
@@ -377,16 +372,35 @@ class VirtualTableComponent extends HTMLElement {
         this.upButton.onmousedown = () => mouseRepeat(() => {
             this.scrollPosition = Math.max(this.scrollPosition - 1, 0)
             this.render()
+            setTimeout(() => this.setFocus())
         })
         this.downButton.onmousedown = () => mouseRepeat(() => {
             this.scrollPosition = Math.min(this.scrollPosition + 1, this.items.length - this.itemsPerPage || 0)
             this.render()
+            setTimeout(() => this.setFocus())
         })
 
         this.scrollbarElement.onmousedown = evt => this.onPageMouseDown(evt)
         this.scrollbarGrip.onmousedown = evt => this.onGripMouseDown(evt)
         this.tableroot.onwheel = evt => this.onWheel(evt)
         this.tableroot.onkeydown = evt => this.onkeydown(evt)
+        this.tableroot.onmousedown = evt => {
+            const el = evt.target
+            const tr = el.closest("tbody tr")
+            if (tr) {
+                const currentIndex = 
+                    Array
+                        .from(tr.parentElement.children)
+                         .findIndex(n => n == tr)
+                     + this.scrollPosition
+                if (currentIndex != -1) {
+                    this.position = currentIndex
+                    this.render()
+                    setTimeout(() => this.setFocus())
+                }
+                    
+            }		
+        }
     }
 
     /**
@@ -489,6 +503,8 @@ class VirtualTableComponent extends HTMLElement {
         this.render()    
     }
 
+    setFocus() { this.tableroot.focus() }
+
     measureItemsPerPage() { this.itemsPerPage = Math.floor((this.tableroot.clientHeight - this.headRow.clientHeight) / this.itemHeight) }
     
     measureItemHeight() {
@@ -518,6 +534,7 @@ class VirtualTableComponent extends HTMLElement {
             }
         }
         mouseRepeat(action)
+        setTimeout(() => this.setFocus())
     }
 
     onGripMouseDown(evt) {
@@ -541,6 +558,8 @@ class VirtualTableComponent extends HTMLElement {
 		window.addEventListener('mousemove', onmove, true)
 		window.addEventListener('mouseup', onup, true)
 
+        this.setFocus()
+
         evt.preventDefault()
         evt.stopPropagation()
     }
@@ -559,7 +578,6 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     onkeydown(evt) {
-        const lastPosition = this.position
         switch (evt.which) {
             case 40: // down
                 this.setScrollPosition(1, true)
@@ -578,8 +596,6 @@ class VirtualTableComponent extends HTMLElement {
             : Math.max(this.position + delta, 0)
         if (scrollIntoView) 
             this.scrollPosition += delta > 0 
-                // TODO: SetFocus on Column and scrollbar
-                // TODO: SetCurrentItem on MouseClick
                 // TODO: delta > 0 and scrollposition too small
                 // TODO: delta < 0 and scrollposition too large
                 ? Math.max(0, this.position - this.scrollPosition - this.itemsPerPage + 1)

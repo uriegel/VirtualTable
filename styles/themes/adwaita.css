@@ -11,6 +11,7 @@
 
     --vtc-scrollbar-button-display: none;
     --vtc-scrollbar-width: 12px;
+    --vtc-scrollbar-background-color: transparent;
     --vtc-scrollbar-border-width: 0px;
     --vtc-scrollbar-grip-width: 4px;
     --vtc-scrollbar-grip-active-color: var(--vtc-selected-background-color);
