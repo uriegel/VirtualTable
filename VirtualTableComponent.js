@@ -386,6 +386,7 @@ class VirtualTableComponent extends HTMLElement {
         this.scrollbarElement.onmousedown = evt => this.onPageMouseDown(evt)
         this.scrollbarGrip.onmousedown = evt => this.onGripMouseDown(evt)
         this.tableroot.onwheel = evt => this.onWheel(evt)
+        this.tableroot.onkeydown = evt => this.onkeydown(evt)
     }
 
     /**
@@ -557,9 +558,36 @@ class VirtualTableComponent extends HTMLElement {
 		}        
     }
 
+    onkeydown(evt) {
+        const lastPosition = this.position
+        switch (evt.which) {
+            case 40: // down
+                this.setScrollPosition(1, true)
+                this.render()
+                break
+            case 38: // up
+                this.setScrollPosition(-1, true)
+                this.render()
+                break
+        }
+    }
+
+    setScrollPosition(delta, scrollIntoView) {
+        this.position = delta > 0 
+            ? Math.min(this.position + delta, this.items.length - 1)
+            : Math.max(this.position + delta, 0)
+        if (scrollIntoView) 
+            this.scrollPosition += delta > 0 
+                // TODO: SetFocus on Column and scrollbar
+                // TODO: SetCurrentItem on MouseClick
+                // TODO: delta > 0 and scrollposition too small
+                // TODO: delta < 0 and scrollposition too large
+                ? Math.max(0, this.position - this.scrollPosition - this.itemsPerPage + 1)
+                : - Math.max(0, this.scrollPosition - this.position)
+    }
+
     render() {
         this.renderItems()
-        this.renderCurrentItem(0)
         this.renderScrollbarGrip()
     }
     
@@ -571,12 +599,12 @@ class VirtualTableComponent extends HTMLElement {
         for (let i = this.scrollPosition; 
                 i < Math.min(this.itemsPerPage + 1 + this.scrollPosition, this.items.length);
                 i++) {
-            const tr = this.renderItem(this.items[i])
+            const tr = this.renderItem(this.items[i], i)
             this.tableBody.appendChild(tr)
         }
     }
 
-    renderItem(item) {
+    renderItem(item, index) {
         const tr = document.createElement('tr')
         this.columns.forEach(col => {
             const td = document.createElement('td')
@@ -586,12 +614,9 @@ class VirtualTableComponent extends HTMLElement {
             col.render(td, item)
             tr.appendChild(td)
         }) 
+        if (this.position == index) 
+            tr.classList.add("isCurrent")
         return tr
-    }
-
-    renderCurrentItem() {
-        if (this.position >= this.scrollPosition && this.position < this.scrollPosition + this.itemsPerPage) 
-            this.tableBody.children[this.position - this.scrollPosition].classList.add("isCurrent")
     }
 
     renderScrollbarGrip() {

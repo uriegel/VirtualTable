@@ -103,8 +103,8 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: CurrentPosition
-// TODO: changing currentIndex with scrolling (ScrollIntoView)
+// TODO: home end
+// TODO: pageUp pageDown
 // TODO: Selection, control in host
 // TODO: Restriction 
 
