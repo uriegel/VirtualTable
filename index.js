@@ -13,6 +13,7 @@ themeChooser.onchange = () => {
         document.body.classList.add(theme)    
         const style = getComputedStyle(document.body)
         exifColor = style.getPropertyValue('--exif-color') 
+        selectedExifColor = style.getPropertyValue('--selected-exif-color') 
         table.classList.add(theme)    
         table.themeChanged()
     }
@@ -31,6 +32,7 @@ themeChooser.onchange = () => {
 }
 
 var exifColor = getComputedStyle(document.body).getPropertyValue('--exif-color') 
+var selectedExifColor = getComputedStyle(document.body).getPropertyValue('--selected-exif-color') 
 
 const widthstr = localStorage.getItem("widths")
 const widths = widthstr ? JSON.parse(widthstr) : []
@@ -52,7 +54,7 @@ let columns = [{
     isSortable: true,
     render: (td, item) => {
         td.innerHTML = item.date
-        td.style.color = exifColor
+        td.style.color = item.isSelected ? selectedExifColor : exifColor
     }
 }, {
     name: "Größe",
@@ -74,6 +76,13 @@ const items = Array.from(Array(4000).keys())
         date: "24.03.1999 14:23",
         size: 2344 + index
     }))
+
+
+items[9].isSelected = true
+
+
+
+
 table.setItems(items)
 
 var saveWidths = true

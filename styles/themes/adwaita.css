@@ -1,6 +1,7 @@
 :root .themeAdwaita {
     background-color: darkgrey;
     --exif-color: darkblue;
+    --selected-exif-color: yellow;
     
     --vtc-background-color: #fcfcfc;
     --vtc-caption-color: #737373;

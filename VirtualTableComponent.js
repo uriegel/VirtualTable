@@ -9,8 +9,10 @@ template.innerHTML = `
             --vtc-caption-background-color: blue;
             --vtc-caption-background-hover-color: #0063ff;
             --vtc-caption-separator-color: white;
-            --vtc-item-selected-color: lightgray;
-            --vtc-item-selected-focus-color: red;
+            --vtc-selected-color:  white;
+            --vtc-selected-background-color: blue;
+            --vtc-current-color: lightgray;
+            --vtc-current-focus-color: red;
         
             --vtc-font-size: 100%;
             --vtc-scrollbar-width: 16px;
@@ -77,13 +79,13 @@ template.innerHTML = `
             padding-right: calc(3px + var(--vtc-scrollbar-right-margin));
         }
         .isCurrent {
-            outline-color: var(--vtc-item-selected-color);
+            outline-color: var(--vtc-current-color);
             outline-width: 1px;
             outline-style: solid;
             outline-offset: -1px;
         }
         .tableroot:focus .isCurrent {
-            outline-color: var(--vtc-item-selected-focus-color);
+            outline-color: var(--vtc-current-focus-color);
         }
         .rightAligned {
             text-align: right;  
@@ -190,6 +192,13 @@ template.innerHTML = `
         }
         .svgImagePath {
             fill: var(--vtc-item-img-color);   
+        }
+        .isSelected {
+            color: var(--vtc-selected-color);
+            background-color: var(--vtc-selected-background-color);
+        }
+        .isSelected .svgImagePath {
+            fill: var(--vtc-selected-color);   
         }
     </style>
     <div class="tableroot" tabIndex=1>
@@ -651,6 +660,8 @@ class VirtualTableComponent extends HTMLElement {
         }) 
         if (this.position == index) 
             tr.classList.add("isCurrent")
+        if (item.isSelected) 
+            tr.classList.add("isSelected")
         return tr
     }
 

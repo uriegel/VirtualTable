@@ -1,4 +1,5 @@
 :root .themeBlue {
     background-color: darkgrey;
     --exif-color: darkblue;
+    --selected-exif-color: yellow;
 }
