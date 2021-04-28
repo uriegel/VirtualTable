@@ -67,7 +67,7 @@ if (widths)
     columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
     
 table.setColumns(columns)
-const items = Array.from(Array(40).keys())
+const items = Array.from(Array(4000).keys())
     .map(index => ({
         name: "Eintrag " + index,
         ext: "ext",
@@ -103,9 +103,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: home end
-// TODO: pageUp pageDown
 // TODO: Selection, control in host
-// TODO: Restriction 
+// TODO: Restriction
 
 

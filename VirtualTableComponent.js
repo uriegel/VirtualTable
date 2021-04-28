@@ -578,17 +578,32 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     onkeydown(evt) {
+        let delta
         switch (evt.which) {
+            case 33: // pageUp
+                delta = -this.itemsPerPage + 1
+                break     
+            case 34: // pageDown
+                delta = this.itemsPerPage - 1
+                break     
+            case 35: // end
+                delta = this.items.length - 1 - this.position
+                break
+            case 36: // home
+                delta = -this.position
+                break
             case 40: // down
-                this.setScrollPosition(1, true)
-                this.render()
+                delta = 1
                 break
             case 38: // up
-                this.setScrollPosition(-1, true)
-                this.render()
+                delta = -1
                 break
+            default:
+                return
         }
-    }
+        this.setScrollPosition(delta, true)
+        this.render()
+}
 
     setScrollPosition(delta, scrollIntoView) {
         this.position = delta > 0 
