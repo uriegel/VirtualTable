@@ -514,6 +514,15 @@ class VirtualTableComponent extends HTMLElement {
 
     setFocus() { this.tableroot.focus() }
 
+    getPosition() { return this.position }
+    setPosition(position) {
+        position = Math.max(0, position)
+        position = Math.min(position, this.items.length)
+        const delta = position - this.position
+        this.adjustPosition(delta, true)
+        this.render()
+    }
+
     measureItemsPerPage() { this.itemsPerPage = Math.floor((this.tableroot.clientHeight - this.headRow.clientHeight) / this.itemHeight) }
     
     measureItemHeight() {
@@ -610,11 +619,11 @@ class VirtualTableComponent extends HTMLElement {
             default:
                 return
         }
-        this.setScrollPosition(delta, true)
+        this.adjustPosition(delta, true)
         this.render()
 }
 
-    setScrollPosition(delta, scrollIntoView) {
+    adjustPosition(delta, scrollIntoView) {
         this.position = delta > 0 
             ? Math.min(this.position + delta, this.items.length - 1)
             : Math.max(this.position + delta, 0)

@@ -77,12 +77,6 @@ const items = Array.from(Array(4000).keys())
         size: 2344 + index
     }))
 
-
-items[9].isSelected = true
-
-
-
-
 table.setItems(items)
 
 var saveWidths = true
@@ -92,6 +86,16 @@ table.addEventListener("columnwidths", e => {
 })
 table.addEventListener("columclick", e => {
     console.log("columclick", e.detail)
+})
+table.addEventListener("keydown", evt => {
+    switch (evt.which) {
+        case 45: { // Ins
+            const pos = table.getPosition()
+            items[pos].isSelected = !items[pos].isSelected 
+            table.setPosition(pos + 1)
+            break
+        }
+    }
 })
 
 changeCols.addEventListener("click", () => {
@@ -112,7 +116,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Selection, control in host
+// TODO: Selection shift home, schift end, -, +
 // TODO: Restriction
 
 
