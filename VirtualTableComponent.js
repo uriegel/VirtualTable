@@ -514,6 +514,8 @@ class VirtualTableComponent extends HTMLElement {
 
     setFocus() { this.tableroot.focus() }
 
+    refresh() { this.render() }
+
     getPosition() { return this.position }
     setPosition(position) {
         position = Math.max(0, position)
@@ -605,9 +607,13 @@ class VirtualTableComponent extends HTMLElement {
                 delta = this.itemsPerPage - 1
                 break     
             case 35: // end
-                delta = this.items.length - 1 - this.position
+                if (evt.shiftKey)
+                    return
+        delta = this.items.length - 1 - this.position
                 break
             case 36: // home
+                if (evt.shiftKey)
+                    return
                 delta = -this.position
                 break
             case 40: // down

@@ -89,10 +89,34 @@ table.addEventListener("columclick", e => {
 })
 table.addEventListener("keydown", evt => {
     switch (evt.which) {
+        case 35: // end
+            if (evt.shiftKey) {
+                const pos = table.getPosition()
+                items.forEach((item, i) => item.isSelected = !item.isNotSelectable && i >= pos)                     
+                table.refresh()
+            }
+            break
+        case 36: // home
+            if (evt.shiftKey) {
+                const pos = table.getPosition()
+                items.forEach((item, i) => item.isSelected = !item.isNotSelectable && i <= pos)                     
+                table.refresh()
+            }
+            break
         case 45: { // Ins
             const pos = table.getPosition()
             items[pos].isSelected = !items[pos].isSelected 
             table.setPosition(pos + 1)
+            break
+        }
+        case 107: { // Numlock +
+            items.forEach(n => n.isSelected = true)
+            table.refresh()
+            break
+        }
+        case 109: { // Numlock -
+            items.forEach(n => n.isSelected = false)
+            table.refresh()
             break
         }
     }
@@ -116,7 +140,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Selection shift home, schift end, -, +
 // TODO: Restriction
 
 
