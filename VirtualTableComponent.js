@@ -657,8 +657,26 @@ class VirtualTableComponent extends HTMLElement {
             }
         }
 
+        const restrictBack = () => {
+            if (this.restriction) {
+                this.restrictionInput.value = this.restrictionInput.value.substr(0, this.restrictionInput.value.length - 1)
+                if (!this.restrictionInput.value)
+                    restrictClose()
+                else {
+                    this.items = this.restrictCallback(this.restriction.originalItems, this.restrictionInput.value)
+                    this.setPosition(0)
+                    this.render()
+                    evt.preventDefault()
+                    evt.stopPropagation()
+                }
+            }
+        }
+
         let delta
         switch (evt.which) {
+            case 8: // backspace
+                restrictBack()
+                return
             case 27: // esc
                 restrictClose()
                 return

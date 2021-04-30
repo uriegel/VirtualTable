@@ -141,6 +141,6 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Restriction backspace: 
+
 
 
