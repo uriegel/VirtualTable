@@ -200,6 +200,29 @@ template.innerHTML = `
         .isSelected .svgImagePath {
             fill: var(--vtc-selected-color);   
         }
+        #restrictionInput {
+            width: 70%;
+            bottom: 10px;
+            height: 18px; 
+            position: absolute;
+            left: 5px;
+            box-sizing: border-box;
+            border-width: 1px;
+            border-radius: 5px;
+            padding: 1px 3px;
+            border-style: solid;
+            border-color: gray;
+            color: var(--vtc-color);
+            background-color: var(--vtc-background-color);
+            box-shadow: 3px 5px 12px 3px rgba(136, 136, 136, 0.55);    
+            transition: opacity 1s;
+        }
+        #restrictionInput.invisible {
+            opacity: 0;
+        }
+        #restrictionInput.none {
+            display: none;
+        }
     </style>
     <div class="tableroot" tabIndex=1>
         <table>
@@ -208,6 +231,7 @@ template.innerHTML = `
             </thead>
             <tbody></tbody>
         </table>
+        <input id="restrictionInput" class="invisible none" >
     </div>
     <div class="scrollbar hidden">
         <svg class="svg" viewBox="0 0 100 100" >
@@ -220,7 +244,8 @@ template.innerHTML = `
             <path class="button" d="M 80,30 50,70 20,30 Z" />
         </svg>
     </div>
-`
+` 
+
 /**
  * @typedef {Object} Column
  * @property {string} title Title of column
@@ -252,10 +277,12 @@ class VirtualTableComponent extends HTMLElement {
         this.scrollbar = this.shadowRoot.querySelector('.scrollbar')
         this.scrollbarElement = this.shadowRoot.querySelector('.scrollbarElement')
         this.scrollbarGrip = this.shadowRoot.querySelector('.scrollbarElement>div')
-
+        
         const buttons = this.shadowRoot.querySelectorAll('svg')
         this.upButton = buttons[0]
         this.downButton = buttons[1]
+
+        this.restriction = document.getElementById("restrictionInput")
     }
 
     connectedCallback() {
@@ -598,6 +625,15 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     onkeydown(evt) {
+
+        const checkRestriction = () => {
+            if (!evt.altKey && !evt.ctrlKey && evt.key.length ==1) {
+                this.restrictTo(restrictValue + evt.key)
+                evt.preventDefault()
+                evt.stopPropagation()
+            }
+        }
+
         let delta
         switch (evt.which) {
             case 33: // pageUp
@@ -609,7 +645,7 @@ class VirtualTableComponent extends HTMLElement {
             case 35: // end
                 if (evt.shiftKey)
                     return
-        delta = this.items.length - 1 - this.position
+                delta = this.items.length - 1 - this.position
                 break
             case 36: // home
                 if (evt.shiftKey)
@@ -623,6 +659,7 @@ class VirtualTableComponent extends HTMLElement {
                 delta = -1
                 break
             default:
+                checkRestriction();
                 return
         }
         this.adjustPosition(delta, true)
@@ -693,6 +730,11 @@ class VirtualTableComponent extends HTMLElement {
             this.scrollbar.classList.remove('hidden')
             this.tableroot.classList.add('scrollbarActive')
         }
+    }
+
+    restrictTo(newValue) {
+        // TODO: call callBack
+        // TODO: check if restriction exists.. create and animate restrictor
     }
 }
 
