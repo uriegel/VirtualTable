@@ -636,10 +636,13 @@ class VirtualTableComponent extends HTMLElement {
 
         const checkRestriction = () => {
             if (!evt.altKey && !evt.ctrlKey && evt.key.length ==1) {
-                this.restrictTo(evt.key)
-                evt.preventDefault()
-                evt.stopPropagation()
+                if (this.restrictTo(evt.key)) {
+                    evt.preventDefault()
+                    evt.stopPropagation()
+                    return true
+                }
             }
+            return false
         }
 
         const restrictClose = () => {
@@ -682,7 +685,7 @@ class VirtualTableComponent extends HTMLElement {
                 delta = -1
                 break
             default:
-                checkRestriction();
+                checkRestriction()
                 return
         }
         this.adjustPosition(delta, true)
@@ -766,6 +769,7 @@ class VirtualTableComponent extends HTMLElement {
                 this.items = restrictedItems
                 this.setPosition(0)
                 this.render()
+                return true
             }
         } else {
             const restrictedItems = this.restrictCallback(this.items, this.restrictionInput.value + newValue)
@@ -774,8 +778,10 @@ class VirtualTableComponent extends HTMLElement {
                 this.items = restrictedItems
                 this.setPosition(0)
                 this.render()
+                return true
             }
         }
+        return false
     }
 }
 
