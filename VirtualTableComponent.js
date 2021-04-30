@@ -215,13 +215,14 @@ template.innerHTML = `
             color: var(--vtc-color);
             background-color: var(--vtc-background-color);
             box-shadow: 3px 5px 12px 3px rgba(136, 136, 136, 0.55);    
-            transition: opacity 1s;
+            transition: opacity 0.5s, width 0.5s;
         }
         #restrictionInput.invisible {
             opacity: 0;
+            width: 0px;
         }
         #restrictionInput.none {
-            display: none;
+            display: block;
         }
     </style>
     <div class="tableroot" tabIndex=1>
@@ -282,7 +283,7 @@ class VirtualTableComponent extends HTMLElement {
         this.upButton = buttons[0]
         this.downButton = buttons[1]
 
-        this.restriction = document.getElementById("restrictionInput")
+        this.restrictionInput = this.shadowRoot.getElementById("restrictionInput")
     }
 
     connectedCallback() {
@@ -437,6 +438,11 @@ class VirtualTableComponent extends HTMLElement {
                     
             }		
         }
+
+        this.restrictionInput.addEventListener("ontransitionend", evt => {
+            if (this.restrictionInput.classList.contains("invisible"))
+                this.restrictionInput.classList.add("none")
+        })
     }
 
     /**
@@ -533,6 +539,8 @@ class VirtualTableComponent extends HTMLElement {
         this.render()    
     }
 
+    setRestriction(restrictCallback) { this.restrictCallback = restrictCallback }
+
     themeChanged() {
         this.measureItemHeight()
         this.measureItemsPerPage()
@@ -628,7 +636,19 @@ class VirtualTableComponent extends HTMLElement {
 
         const checkRestriction = () => {
             if (!evt.altKey && !evt.ctrlKey && evt.key.length ==1) {
-                this.restrictTo(restrictValue + evt.key)
+                this.restrictTo(evt.key)
+                evt.preventDefault()
+                evt.stopPropagation()
+            }
+        }
+
+        const restrictClose = () => {
+            if (this.restriction) {
+                this.items = this.restriction.originalItems
+                this.setPosition(0)
+                this.render()
+                this.restrictionInput.classList.add("invisible")
+                this.restriction = null
                 evt.preventDefault()
                 evt.stopPropagation()
             }
@@ -636,6 +656,9 @@ class VirtualTableComponent extends HTMLElement {
 
         let delta
         switch (evt.which) {
+            case 27: // esc
+                restrictClose()
+                return
             case 33: // pageUp
                 delta = -this.itemsPerPage + 1
                 break     
@@ -733,8 +756,26 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     restrictTo(newValue) {
-        // TODO: call callBack
-        // TODO: check if restriction exists.. create and animate restrictor
+        if (!this.restriction) {
+            const restrictedItems = this.restrictCallback(this.items, newValue)
+            if (restrictedItems && restrictedItems.length > 0) {
+                this.restriction = { originalItems: this.items }
+                this.restrictionInput.classList.remove("none")
+                setTimeout(() => this.restrictionInput.classList.remove("invisible"))
+                this.restrictionInput.value = newValue
+                this.items = restrictedItems
+                this.setPosition(0)
+                this.render()
+            }
+        } else {
+            const restrictedItems = this.restrictCallback(this.items, this.restrictionInput.value + newValue)
+            if (restrictedItems.length > 0) {
+                this.restrictionInput.value += newValue
+                this.items = restrictedItems
+                this.setPosition(0)
+                this.render()
+            }
+        }
     }
 }
 

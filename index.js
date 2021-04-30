@@ -78,6 +78,7 @@ const items = Array.from(Array(4000).keys())
     }))
 
 table.setItems(items)
+table.setRestriction((items, restrictValue) => items.filter(n => n.name.toLowerCase().startsWith(restrictValue.toLowerCase())))
 
 var saveWidths = true
 table.addEventListener("columnwidths", e => {
@@ -140,6 +141,7 @@ changeCols.addEventListener("click", () => {
 
 })
 
-// TODO: Restriction
+// TODO: SetSelection callback on displayItems
+// TODO: Restriction backspace: 
 
 
