@@ -271,6 +271,7 @@ class VirtualTableComponent extends HTMLElement {
         this.scrollPosition = 0
         this.attachShadow({ mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true))
+        this.wheelTimestamp = performance.now()
 
         this.tableroot = this.shadowRoot.querySelector('.tableroot')
         this.headRow = this.shadowRoot.querySelector('thead>tr')
@@ -621,14 +622,20 @@ class VirtualTableComponent extends HTMLElement {
 
     onWheel(evt) {
 		if (this.items.length > this.itemsPerPage) {
-			var delta = evt.deltaY / Math.abs(evt.deltaY) * 3
-			let newPos = this.scrollPosition + delta
-			if (newPos < 0)
-				newPos = 0
-			if (newPos > this.items.length - this.itemsPerPage) 
-				newPos = this.items.length - this.itemsPerPage 
-            this.scrollPosition = newPos
-            this.render()
+            const newTime = performance.now()
+            const diff = newTime - this.wheelTimestamp
+            if (diff > 10) {
+                this.wheelTimestamp = newTime
+    
+                var delta = evt.deltaY / Math.abs(evt.deltaY) * 3
+                let newPos = this.scrollPosition + delta
+                if (newPos < 0)
+                    newPos = 0
+                if (newPos > this.items.length - this.itemsPerPage) 
+                    newPos = this.items.length - this.itemsPerPage 
+                this.scrollPosition = newPos
+                this.render()
+            }
 		}        
     }
 
