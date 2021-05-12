@@ -85,8 +85,8 @@ table.addEventListener("columnwidths", e => {
     if (saveWidths) 
         localStorage.setItem("widths", JSON.stringify(e.detail))
 })
-table.addEventListener("columclick", e => {
-    console.log("columclick", e.detail)
+table.addEventListener("columnclick", e => {
+    console.log("columnclick", e.detail)
 })
 table.addEventListener("keydown", evt => {
     switch (evt.which) {
@@ -121,6 +121,10 @@ table.addEventListener("keydown", evt => {
             break
         }
     }
+})
+
+table.addEventListener("enter", e => {
+    console.log("Enter", e.detail)
 })
 
 changeCols.addEventListener("click", () => {
