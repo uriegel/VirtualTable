@@ -68,6 +68,10 @@ let columns = [{
 if (widths)
     columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
     
+table.renderRow = (item, tr) => {
+    if (item.name.endsWith("4"))
+        tr.style.opacity = 0.4
+}
 table.setColumns(columns)
 const items = Array.from(Array(4000).keys())
     .map(index => ({
