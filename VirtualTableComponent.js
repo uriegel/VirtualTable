@@ -184,7 +184,7 @@ template.innerHTML = `
             background-color: var(--vtc-scrollbar-grip-active-color);
             transition: background-color 0s;
         }             
-        .svgImage {
+        .image {
             width: 16px;
             height: 16px;
             vertical-align: bottom;
@@ -537,6 +537,7 @@ class VirtualTableComponent extends HTMLElement {
     }
 
     setItems(items) {
+        this.scrollPosition = 0
         this.items = items
         if (!this.itemHeight) 
             this.measureItemHeight()
@@ -769,7 +770,7 @@ class VirtualTableComponent extends HTMLElement {
         while (last = this.tableBody.lastChild) 
             this.tableBody.removeChild(last)
 
-        for (let i = this.scrollPosition; 
+            for (let i = this.scrollPosition; 
                 i < Math.min(this.itemsPerPage + 1 + this.scrollPosition, this.items.length);
                 i++) {
             const tr = this.renderItem(this.items[i], i)
