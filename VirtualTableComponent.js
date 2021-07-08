@@ -17,6 +17,12 @@
 }
 
 class VirtualTableComponent extends HTMLElement {
+
+    get position() { return this._position }
+    set position(value) {
+        this._position = value
+        this.dispatchEvent(new CustomEvent('currentIndexChanged', { detail: this._position }))
+    }
     constructor() {
         super()
         this.items = []
@@ -737,12 +743,15 @@ class VirtualTableComponent extends HTMLElement {
                     return
                 delta = -this.position
                 break
-            case 40: // down
-                delta = 1
-                break
             case 38: // up
                 delta = -1
                 break
+            case 40: // down
+                delta = 1
+                break
+            case 46: //DEL
+                this.dispatchEvent(new CustomEvent('delete', { detail: { currentItem: this.position } }))
+                return
             default:
                 checkRestriction()
                 return
