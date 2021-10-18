@@ -1,8 +1,8 @@
-import './VirtualTableComponent.js'
+import './VirtualTable.js'
 
 const themeChooser = document.getElementById("themeChooser")
 const changeCols = document.getElementById("changeCols")
-const table = document.querySelector('virtual-table-component')
+const table = document.querySelector('virtual-table')
 
 themeChooser.onchange = () => {
     const changeTheme = theme => {
@@ -15,7 +15,7 @@ themeChooser.onchange = () => {
         exifColor = style.getPropertyValue('--exif-color') 
         selectedExifColor = style.getPropertyValue('--selected-exif-color') 
         table.classList.add(theme)    
-        table.themeChanged()
+        table.reRender()
     }
 
     switch (themeChooser.selectedIndex) {

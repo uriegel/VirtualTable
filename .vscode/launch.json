@@ -5,48 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "by-gdb",
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
             "request": "launch",
-            "name": "Launch(gdb)",
-            "program": "target/debug/testserver",
-            "cwd": "${workspaceRoot}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'testserver'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=testserver",
-                    "--package=testserver"
-                ],
-                "filter": {
-                    "name": "testserver",
-                    "kind": "bin"
-                }
-            },
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/server/bin/Debug/net5.0/server.dll",
             "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'testserver'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=testserver",
-                    "--package=testserver"
-                ],
-                "filter": {
-                    "name": "testserver",
-                    "kind": "bin"
-                }
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
-            "args": [],
-            "cwd": "${workspaceFolder}"
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
         }
+
     ]
 }
