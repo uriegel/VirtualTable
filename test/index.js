@@ -1,4 +1,4 @@
-import './VirtualTable.js'
+import '../src/VirtualTable.js'
 
 const themeChooser = document.getElementById("themeChooser")
 const changeCols = document.getElementById("changeCols")

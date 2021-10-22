@@ -1,0 +1,33 @@
+{
+  "name": "virtual-table-component",
+  "version": "0.0.1",
+  "description": "A virtual table web component",
+  "main": "dist/index.js",
+  "module": "src/index.js",
+  "directories": {
+    "src": "src"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uriegel/virtual-table-component.git"
+  },
+  "keywords": [
+    "javascript",
+    "web-components"
+  ],
+  "author": "Uwe Riegel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uriegel/virtual-table-component/issues"
+  },
+  "homepage": "https://github.com/uriegel/virtual-table-component#readme",
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "webpack": "^5.59.1",
+    "webpack-cli": "^4.9.1"
+  }
+}
