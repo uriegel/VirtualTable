@@ -1,15 +1,16 @@
 {
   "name": "virtual-table-component",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "type": "module",
   "description": "A virtual table web component",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "module": "src/index.js",
   "directories": {
     "src": "src"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "build": "npm run clean && webpack --mode production"
+    "do publish test": "npm publish --dry-run",
+    "do publish": "npm publish"
   },
   "repository": {
     "type": "git",
@@ -24,10 +25,5 @@
   "bugs": {
     "url": "https://github.com/uriegel/virtual-table-component/issues"
   },
-  "homepage": "https://github.com/uriegel/virtual-table-component#readme",
-  "devDependencies": {
-    "rimraf": "^3.0.2",
-    "webpack": "^5.59.1",
-    "webpack-cli": "^4.9.1"
-  }
+  "homepage": "https://github.com/uriegel/virtual-table-component#readme"
 }

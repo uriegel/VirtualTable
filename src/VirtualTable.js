@@ -16,7 +16,7 @@
     window.addEventListener("mouseup", mouseUp)
 }
 
-class VirtualTable extends HTMLElement {
+export class VirtualTable extends HTMLElement {
 
     get position() { return this._position }
     set position(value) {
