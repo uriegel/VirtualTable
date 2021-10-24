@@ -50,19 +50,19 @@ let columns = [{
     name: "Ext.",
     render: (td, item) => td.innerHTML = item.ext
 }, {
-    name: "Datum",
-    isSortable: true,
-    render: (td, item) => {
-        td.innerHTML = item.date
-        td.style.color = item.isSelected ? selectedExifColor : exifColor
-    }
-}, {
     name: "Größe",
     isSortable: true,
     isRightAligned: true,
     render: (td, item) => {
         td.innerHTML = item.size
         td.classList.add("rightAligned")
+    }
+}, {
+    name: "Datum",
+    isSortable: true,
+    render: (td, item) => {
+        td.innerHTML = item.date
+        td.style.color = item.isSelected ? selectedExifColor : exifColor
     }
 }]
 if (widths)

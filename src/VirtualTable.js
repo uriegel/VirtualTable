@@ -14,7 +14,9 @@
             clearInterval(interval)
     }
     window.addEventListener("mouseup", mouseUp)
-}
+ }
+
+const minScrollbarGripSize = 20
 
 export class VirtualTable extends HTMLElement {
 
@@ -84,12 +86,16 @@ export class VirtualTable extends HTMLElement {
                     table-layout: fixed;
                 }
                 table td {
+                    padding-left: 6px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     user-select: none;
                     transition: padding-right .4s;
-                }            
+                }
+                table td:first-child {
+                    padding-left: 1px;
+                }     
                 thead { 
                     color: var(--vtc-caption-color);
                     background-color: var(--vtc-caption-background-color);
@@ -300,6 +306,10 @@ export class VirtualTable extends HTMLElement {
 
         this.restrictionInput = this.shadowRoot.getElementById("restrictionInput")
         this.itemsPerPage = -1
+
+        const sbr = this.getAttribute("scrollbarRight")
+        if (sbr)
+            this.index = this.scrollbar.style.right = sbr
     }
 
     connectedCallback() {
@@ -832,7 +842,7 @@ export class VirtualTable extends HTMLElement {
 
     renderScrollbarGrip() {
         const range = Math.max(0, this.items.length - this.itemsPerPage) + 1
-        const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), 10)
+        const gripHeight = Math.max(this.scrollbarElement.clientHeight * (this.itemsPerPage / this.items.length || 1), minScrollbarGripSize)
         this.scrollbarGrip.style.top = `${(this.scrollbarElement.clientHeight - gripHeight) * (this.scrollPosition / (range - 1))}px` 
         this.scrollbarGrip.style.height = `${gripHeight}px`
         if (this.itemsPerPage == -1 || this.itemsPerPage > this.items.length - 1) {
