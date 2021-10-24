@@ -307,11 +307,24 @@ export class VirtualTable extends HTMLElement {
         this.restrictionInput = this.shadowRoot.getElementById("restrictionInput")
         this.itemsPerPage = -1
 
-        const sbr = this.getAttribute("scrollbarRight")
+        const sbr = this.getAttribute("scrollbar-right")
         if (sbr)
             this.index = this.scrollbar.style.right = sbr
     }
 
+    static get observedAttributes() {
+        return ['scrollbar-right']
+    }
+
+    attributeChangedCallback(attributeName, oldValue, newValue) {
+        switch (attributeName) {
+            case "scrollbar-right":
+                if (oldValue != newValue)
+                    this.index = this.scrollbar.style.right = newValue
+                break
+        }
+    }
+    
     connectedCallback() {
        
         const onMouseMove = evt => {
