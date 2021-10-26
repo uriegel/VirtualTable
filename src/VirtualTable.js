@@ -513,6 +513,7 @@ export class VirtualTable extends HTMLElement {
                 th.style.width = n.width + '%'
             if (n.isSortable) {
                 th.onclick = evt => {
+                    const subItem = evt.target.tagName == "SPAN" && evt.target.style.flexGrow != 1
                     let element = th.firstChild.firstChild                     
                         ? subItem ? th.firstChild.lastChild : th.firstChild.firstChild 
                         : th
@@ -525,7 +526,6 @@ export class VirtualTable extends HTMLElement {
                         element.classList.remove("sortAscending")
                     }
 
-                    const subItem = evt.target.tagName == "SPAN" && evt.target.style.flexGrow != 1
                     Array.from(this.headRow.children)
                         .filter( n => n != th)
                         .forEach(n => {
