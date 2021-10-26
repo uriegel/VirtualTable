@@ -17,6 +17,7 @@
  }
 
 const minScrollbarGripSize = 20
+const disabled = "disabled"
 
 export class VirtualTable extends HTMLElement {
 
@@ -242,6 +243,9 @@ export class VirtualTable extends HTMLElement {
                 }
                 .isSelected .svgImagePath {
                     fill: var(--vtc-selected-color);   
+                }
+                .disabled {
+                    background-color: var(--vtc-caption-background-hover-color)
                 }
                 #restrictionInput {
                     width: 70%;
@@ -509,10 +513,14 @@ export class VirtualTable extends HTMLElement {
                 th.style.width = n.width + '%'
             if (n.isSortable) {
                 th.onclick = evt => {
-                    if (this.draggingReady)
+                    let element = th.firstChild.firstChild                     
+                        ? subItem ? th.firstChild.lastChild : th.firstChild.firstChild 
+                        : th
+
+                    if (this.draggingReady || element.classList.contains(disabled))
                         return
 
-                    const remove = element =>  {
+                    const remove = element => {
                         element.classList.remove("sortDescending")
                         element.classList.remove("sortAscending")
                     }
@@ -530,9 +538,6 @@ export class VirtualTable extends HTMLElement {
                         })
                     let descending = false
                     
-                    let element = th.firstChild.firstChild 
-                        ? subItem ? th.firstChild.lastChild : th.firstChild.firstChild 
-                        : th
                     if (element.classList.contains("sortAscending")) {
                         element.classList.remove("sortAscending")
                         element.classList.add("sortDescending")
@@ -575,6 +580,14 @@ export class VirtualTable extends HTMLElement {
             this.headRow.appendChild(th)
             this.scrollbar.style.height = `calc(100% - ${this.headRow.clientHeight}px)` 
         })
+    }
+
+    disableSorting(columnIndex, isDisabled) {
+        const col = Array.from(this.headRow.children)[columnIndex]
+        if (isDisabled)
+            col.classList.add(disabled)
+        else
+        col.classList.remove(disabled)
     }
 
     setItems(items) {

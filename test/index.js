@@ -3,6 +3,7 @@ import '../src/VirtualTable.js'
 const themeChooser = document.getElementById("themeChooser")
 const changeCols = document.getElementById("changeCols")
 const table = document.querySelector('virtual-table')
+const disableDate = document.getElementById("disableDate")
 
 themeChooser.onchange = () => {
     const changeTheme = theme => {
@@ -149,6 +150,10 @@ changeCols.addEventListener("click", () => {
 
 })
 
-
+var disabled = false
+disableDate.onclick = () => {
+    disabled = !disabled
+    table.disableSorting(3, disabled) 
+}
 
 
