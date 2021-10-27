@@ -503,6 +503,9 @@ export class VirtualTable extends HTMLElement {
         while (last = this.headRow.lastChild) 
             this.headRow.removeChild(last)
     
+        if (columns.find(n => !n.width)) 
+            columns.forEach(n => n.width = 100.0 / columns.length)
+        
         columns.forEach((n, i) => {
             const th = document.createElement('th')
             th.ondblclick = evt => {
