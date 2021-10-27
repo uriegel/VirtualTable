@@ -380,11 +380,11 @@ export class VirtualTable extends HTMLElement {
                     const getCombinedWidth = (column, nextColumn) => {
                         const firstWidth = 
                             column.style.width
-                            ? parseFloat(column.style.width.substr(0, column.style.width.length - 1))
+                            ? parseFloat(column.style.width.substr(0, column.style.width.length - 1).replace(',', '.'))
                             : 100 / this.columns.length
                         const secondWidth = 
                             nextColumn.style.width
-                            ? parseFloat(nextColumn.style.width.substr(0, nextColumn.style.width.length - 1))
+                            ? parseFloat(nextColumn.style.width.substr(0, nextColumn.style.width.length - 1).replace(',', '.'))
                             : 100 / this.columns.length
                         return firstWidth + secondWidth
                     }                        
@@ -407,7 +407,7 @@ export class VirtualTable extends HTMLElement {
                         const ths = Array.from(targetColumn.parentElement.children)
                          return ths.map(th => 
                              th.style.width 
-                                ? parseFloat(th.style.width.substr(0, th.style.width.length - 1))
+                                ? parseFloat(th.style.width.substr(0, th.style.width.length - 1).replace(',', '.'))
                                 : 100 / this.columns.length
                          )
                     }
