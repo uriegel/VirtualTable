@@ -380,11 +380,11 @@ export class VirtualTable extends HTMLElement {
                     const getCombinedWidth = (column, nextColumn) => {
                         const firstWidth = 
                             column.style.width
-                            ? parseFloat(column.style.width.substr(0, column.style.width.length - 1).replace(',', '.'))
+                            ? parseFloat(column.style.width.substr(0, column.style.width.length - 1))
                             : 100 / this.columns.length
                         const secondWidth = 
                             nextColumn.style.width
-                            ? parseFloat(nextColumn.style.width.substr(0, nextColumn.style.width.length - 1).replace(',', '.'))
+                            ? parseFloat(nextColumn.style.width.substr(0, nextColumn.style.width.length - 1))
                             : 100 / this.columns.length
                         return firstWidth + secondWidth
                     }                        
@@ -407,7 +407,7 @@ export class VirtualTable extends HTMLElement {
                         const ths = Array.from(targetColumn.parentElement.children)
                          return ths.map(th => 
                              th.style.width 
-                                ? parseFloat(th.style.width.substr(0, th.style.width.length - 1).replace(',', '.'))
+                                ? parseFloat(th.style.width.substr(0, th.style.width.length - 1))
                                 : 100 / this.columns.length
                          )
                     }
@@ -503,9 +503,6 @@ export class VirtualTable extends HTMLElement {
         while (last = this.headRow.lastChild) 
             this.headRow.removeChild(last)
     
-        if (columns.find(n => !n.width)) 
-            columns.forEach(n => n.width = 100.0 / columns.length)
-        
         columns.forEach((n, i) => {
             const th = document.createElement('th')
             th.ondblclick = evt => {
