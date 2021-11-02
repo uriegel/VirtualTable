@@ -840,7 +840,7 @@ export class VirtualTable extends HTMLElement {
         while (last = this.tableBody.lastChild) 
             this.tableBody.removeChild(last)
 
-            for (let i = this.scrollPosition; 
+        for (let i = this.scrollPosition; 
                 i < Math.min(this.itemsPerPage + 1 + this.scrollPosition, this.items.length);
                 i++) {
             const tr = this.renderItem(this.items[i], i)
