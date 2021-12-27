@@ -429,11 +429,14 @@ export class VirtualTable extends HTMLElement {
             }
         }
 
-        window.addEventListener('resize', () => {
+        const resizeObserver = new ResizeObserver(() => {
             if (!this.resizeTimer)
                 this.resizeTimer = setTimeout(() => {
                     this.resizeTimer = 0
                     const lastItemsPerPage = this.itemsPerPage
+                    this.measureScrollbarTop()
+                    if (!this.itemHeight) 
+                        this.measureItemHeight()
                     this.measureItemsPerPage()
                     if (lastItemsPerPage != this.itemsPerPage) {
                         if (this.scrollPosition > this.items.length - this.itemsPerPage) 
@@ -442,6 +445,8 @@ export class VirtualTable extends HTMLElement {
                     }
                 }, 50)
         })
+        resizeObserver.observe(this.tableroot)
+
         this.headRow.addEventListener('mousemove', onMouseMove)
         this.headRow.addEventListener('mouseleave', () => {
             this.draggingReady = false
@@ -578,7 +583,7 @@ export class VirtualTable extends HTMLElement {
                 th.appendChild(thDiv)
             }
             this.headRow.appendChild(th)
-            this.scrollbar.style.height = `calc(100% - ${this.headRow.clientHeight}px)` 
+            this.measureScrollbarTop()            
         })
     }
 
@@ -641,14 +646,16 @@ export class VirtualTable extends HTMLElement {
     
     measureItemHeight() {
         if (this.items.length > 0) {
-            const tr = document.createElement('tr')
-            const td = document.createElement('td')
-            this.columns[0].render(td, this.items[0])
-            tr.appendChild(td)
+            const tr = this.renderItem(this.items[0], 0)
             this.tableBody.appendChild(tr)
             this.itemHeight = tr.offsetHeight
             this.tableBody.removeChild(tr)
         }
+    }
+
+    measureScrollbarTop() {
+        if (!this.scrollbar.style.height && this.headRow.clientHeight)
+            this.scrollbar.style.height = `calc(100% - ${this.headRow.clientHeight}px)`
     }
 
     onPageMouseDown(evt) {

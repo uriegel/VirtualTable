@@ -13,3 +13,7 @@ body {
     flex-grow: 1;
     position: relative;
 }
+
+.hidden {
+    display: none;
+}

@@ -1,6 +1,6 @@
 {
   "name": "virtual-table-component",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "type": "module",
   "description": "A virtual table web component",
   "main": "src/index.js",

@@ -5,6 +5,11 @@ const changeCols = document.getElementById("changeCols")
 const table = document.querySelector('virtual-table')
 const disableDate = document.getElementById("disableDate")
 
+const fill = document.getElementById("fill")
+const show = document.getElementById("show")
+
+show.onclick = () => table.classList.remove("hidden")
+
 themeChooser.onchange = () => {
     const changeTheme = theme => {
         ["themeBlue", "themeAdwaita", "themeAdwaitaDark"].forEach(n => {
@@ -74,7 +79,7 @@ table.renderRow = (item, tr) => {
         tr.style.opacity = 0.4
 }
 table.setColumns(columns)
-const items = Array.from(Array(4000).keys())
+const items = Array.from(Array(40).keys())
     .map(index => ({
         name: "Eintrag " + index,
         ext: "ext",
@@ -82,7 +87,8 @@ const items = Array.from(Array(4000).keys())
         size: 2344 + index
     }))
 
-table.setItems(items)
+fill.onclick = () => table.setItems(items)
+
 table.setRestriction((items, restrictValue) => items.filter(n => n.name.toLowerCase().startsWith(restrictValue.toLowerCase())))
 
 var saveWidths = true
