@@ -556,7 +556,7 @@ export class VirtualTable extends HTMLElement {
                         remove(element)
                     }
 
-                    this.dispatchEvent(new CustomEvent('columnclick', { detail: { column: n.sortindex || i, descending, subItem } }))
+                    this.dispatchEvent(new CustomEvent('columnclick', { detail: { column: n.sortIndex || i, descending, subItem } }))
                 }
             }
             if (n.isRightAligned)
