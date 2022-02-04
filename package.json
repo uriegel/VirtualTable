@@ -10,6 +10,7 @@
   },
   "scripts": {
     "typescript": "tsc -p typescript",
+    "typescript-test": "tsc -p test",
     "do publish test": "npm run typescript && npm publish --dry-run",
     "do publish": "npm run typescript && npm publish"
   },

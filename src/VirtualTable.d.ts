@@ -17,8 +17,8 @@ export declare class VirtualTable extends HTMLElement {
     get position(): number;
     set position(value: number);
     private _position;
+    items: any[];
     private scrollPosition;
-    private items;
     private wheelTimestamp;
     private itemsPerPage;
     private tableroot;
@@ -42,7 +42,7 @@ export declare class VirtualTable extends HTMLElement {
     setColumns(columns: Column[]): void;
     disableSorting(columnIndex: number, isDisabled: boolean): void;
     setItems(items: any[]): void;
-    setRestriction(restrictCallback: (originalItems: any, resrictionInput: string) => any[]): void;
+    setRestriction(restrictCallback: (originalItems: any[], resrictionInput: string) => any[]): void;
     reRender(): void;
     setFocus(): void;
     refresh(): void;
@@ -59,7 +59,7 @@ export declare class VirtualTable extends HTMLElement {
     private adjustPosition;
     setFocused(): void;
     render(): void;
-    private renderRow;
+    renderRow: (item: any, tr: HTMLElement) => void;
     renderItems(): void;
     private renderItem;
     private renderScrollbarGrip;

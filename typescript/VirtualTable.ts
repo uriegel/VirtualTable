@@ -41,8 +41,8 @@ export class VirtualTable extends HTMLElement {
     }
     private _position: number = -1
 
+    items: any[] = []
     private scrollPosition = 0    
-    private items: any[] = []
     private wheelTimestamp = performance.now()
     private itemsPerPage = -1
     private tableroot: HTMLElement
@@ -58,7 +58,7 @@ export class VirtualTable extends HTMLElement {
     private columns: Column[] = []
     private resizeTimer = 0
     private itemHeight = 0
-    private restrictCallback?: (originalItems: any, resrictionInput: string)=>any[]
+    private restrictCallback?: (originalItems: any[], resrictionInput: string)=>any[]
     private restriction?: Restriction | null
 
     constructor() {
@@ -633,7 +633,7 @@ export class VirtualTable extends HTMLElement {
         this.render()    
     }
 
-    setRestriction(restrictCallback: (originalItems: any, resrictionInput: string)=>any[]) { this.restrictCallback = restrictCallback }
+    setRestriction(restrictCallback: (originalItems: any[], resrictionInput: string)=>any[]) { this.restrictCallback = restrictCallback }
 
     reRender() {
         this.measureItemHeight()
@@ -867,7 +867,7 @@ export class VirtualTable extends HTMLElement {
         this.renderScrollbarGrip()
     }
 
-    private renderRow = (item: any, tr?: HTMLElement) => {}
+    renderRow = (item: any, tr: HTMLElement) => {}
     
     renderItems() {
         let last

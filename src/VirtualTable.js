@@ -16,8 +16,8 @@ export class VirtualTable extends HTMLElement {
     constructor() {
         super();
         this._position = -1;
-        this.scrollPosition = 0;
         this.items = [];
+        this.scrollPosition = 0;
         this.wheelTimestamp = performance.now();
         this.itemsPerPage = -1;
         this.draggingReady = false;

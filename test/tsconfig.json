@@ -2,8 +2,7 @@
     "compilerOptions": {
         "target": "ES2021",
         "module": "ES2020",
-        "sourceMap": false,
-        "outDir": "../src",
+        "sourceMap": true,
         "strict": true,
         "declaration": true,
         "allowUnreachableCode": false,
