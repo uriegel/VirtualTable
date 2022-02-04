@@ -1,6 +1,6 @@
 {
   "name": "virtual-table-component",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "type": "module",
   "description": "A virtual table web component",
   "main": "src/index.js",
@@ -9,8 +9,9 @@
     "src": "src"
   },
   "scripts": {
-    "do publish test": "npm publish --dry-run",
-    "do publish": "npm publish"
+    "typescript": "tsc -p typescript",
+    "do publish test": "npm run typescript && npm publish --dry-run",
+    "do publish": "npm run typescript && npm publish"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/uriegel/virtual-table-component/issues"
   },
-  "homepage": "https://github.com/uriegel/virtual-table-component#readme"
+  "homepage": "https://github.com/uriegel/virtual-table-component#readme",
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
 }
