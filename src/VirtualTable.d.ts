@@ -6,7 +6,7 @@ export interface SubColumn {
 }
 export interface Column {
     name: string;
-    render: (td: HTMLElement, item: any) => void;
+    render: (td: HTMLTableCellElement, item: any) => void;
     width?: number;
     isSortable?: boolean;
     sortIndex?: number;
