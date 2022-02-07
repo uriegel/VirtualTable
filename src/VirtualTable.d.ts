@@ -59,7 +59,7 @@ export declare class VirtualTable extends HTMLElement {
     private adjustPosition;
     setFocused(): void;
     render(): void;
-    renderRow: (item: any, tr: HTMLElement) => void;
+    renderRow: (item: any, tr: HTMLTableRowElement) => void;
     renderItems(): void;
     private renderItem;
     private renderScrollbarGrip;

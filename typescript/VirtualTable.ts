@@ -867,7 +867,7 @@ export class VirtualTable extends HTMLElement {
         this.renderScrollbarGrip()
     }
 
-    renderRow = (item: any, tr: HTMLElement) => {}
+    renderRow = (item: any, tr: HTMLTableRowElement) => {}
     
     renderItems() {
         let last
