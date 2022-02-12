@@ -1,13 +1,21 @@
 import '../src/index.js'
-import { Column, VirtualTable } from '../src/index.js'
+import { Column, TableItem, VirtualTable } from '../src/index.js'
 
 const themeChooser = document.getElementById("themeChooser")! as HTMLSelectElement
 const changeCols = document.getElementById("changeCols")!
-const table = document.querySelector('virtual-table')! as VirtualTable
+const table = document.querySelector('virtual-table')! as VirtualTable<TestItem>
 const disableDate = document.getElementById("disableDate")!
 
 const fill = document.getElementById("fill")!
 const show = document.getElementById("show")!
+
+interface TestItem extends TableItem {
+    name: string
+    ext: string
+    size: number
+    date: string
+    isNotSelectable?: boolean
+}
 
 show.onclick = () => table.classList.remove("hidden")
 
@@ -43,7 +51,7 @@ var selectedExifColor = getComputedStyle(document.body).getPropertyValue('--sele
 
 const widthstr = localStorage.getItem("widths")
 const widths = widthstr ? JSON.parse(widthstr) : []
-let columns: Column[] = [{
+let columns: Column<TestItem>[] = [{
     name: "Name",
     isSortable: true,
     render: (td, item) => {
@@ -61,7 +69,7 @@ let columns: Column[] = [{
     isSortable: true,
     isRightAligned: true,
     render: (td, item) => {
-        td.innerHTML = item.size
+        td.innerHTML = item.size.toString()
         td.classList.add("rightAligned")
     }
 }, {

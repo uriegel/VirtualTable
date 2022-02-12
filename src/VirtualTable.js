@@ -831,4 +831,6 @@ export class VirtualTable extends HTMLElement {
         return false;
     }
 }
-customElements.define('virtual-table', VirtualTable);
+class VirtualTableComponent extends VirtualTable {
+}
+customElements.define('virtual-table', VirtualTableComponent);

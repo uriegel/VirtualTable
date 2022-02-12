@@ -53,7 +53,7 @@ let columns = [{
         isSortable: true,
         isRightAligned: true,
         render: (td, item) => {
-            td.innerHTML = item.size;
+            td.innerHTML = item.size.toString();
             td.classList.add("rightAligned");
         }
     }, {

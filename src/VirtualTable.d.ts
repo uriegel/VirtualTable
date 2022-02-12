@@ -1,23 +1,26 @@
-export interface Restriction {
-    originalItems: any[];
+export interface Restriction<TItem> {
+    originalItems: TItem[];
 }
 export interface SubColumn {
     name: string;
 }
-export interface Column {
+export interface Column<TItem> {
     name: string;
-    render: (td: HTMLTableCellElement, item: any) => void;
+    render: (td: HTMLTableCellElement, item: TItem) => void;
     width?: number;
     isSortable?: boolean;
     sortIndex?: number;
     isRightAligned?: boolean;
     subItem?: SubColumn;
 }
-export declare class VirtualTable extends HTMLElement {
+export interface TableItem {
+    isSelected?: boolean;
+}
+export declare class VirtualTable<TItem extends TableItem> extends HTMLElement {
     get position(): number;
     set position(value: number);
     private _position;
-    items: any[];
+    items: TItem[];
     private scrollPosition;
     private wheelTimestamp;
     private itemsPerPage;
@@ -39,10 +42,10 @@ export declare class VirtualTable extends HTMLElement {
     constructor();
     static get observedAttributes(): string[];
     connectedCallback(): void;
-    setColumns(columns: Column[]): void;
+    setColumns(columns: Column<TItem>[]): void;
     disableSorting(columnIndex: number, isDisabled: boolean): void;
-    setItems(items: any[]): void;
-    setRestriction(restrictCallback: (originalItems: any[], resrictionInput: string) => any[]): void;
+    setItems(items: TItem[]): void;
+    setRestriction(restrictCallback: (originalItems: TItem[], resrictionInput: string) => TItem[]): void;
     reRender(): void;
     setFocus(): void;
     refresh(): void;
@@ -59,7 +62,7 @@ export declare class VirtualTable extends HTMLElement {
     private adjustPosition;
     setFocused(): void;
     render(): void;
-    renderRow: (item: any, tr: HTMLTableRowElement) => void;
+    renderRow: (item: TItem, tr: HTMLTableRowElement) => void;
     renderItems(): void;
     private renderItem;
     private renderScrollbarGrip;

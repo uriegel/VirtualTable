@@ -1,19 +1,23 @@
-export interface Restriction {
-    originalItems: any[]    
+export interface Restriction<TItem> {
+    originalItems: TItem[]    
 }
 
 export interface SubColumn {
     name: string
 }
 
-export interface Column {
+export interface Column<TItem> {
     name: string
-    render: (td: HTMLTableCellElement, item: any)=>void
+    render: (td: HTMLTableCellElement, item: TItem)=>void
     width?: number
     isSortable?: boolean
     sortIndex?: number
     isRightAligned?: boolean
     subItem?: SubColumn
+}
+
+export interface TableItem {
+    isSelected?: boolean
 }
 
 const mouseRepeat = (action: ()=>void) => {
@@ -32,7 +36,7 @@ const mouseRepeat = (action: ()=>void) => {
 const minScrollbarGripSize = 20
 const disabled = "disabled"
 
-export class VirtualTable extends HTMLElement {
+export class VirtualTable<TItem extends TableItem> extends HTMLElement {
 
     get position() { return this._position }
     set position(value) {
@@ -41,7 +45,7 @@ export class VirtualTable extends HTMLElement {
     }
     private _position: number = -1
 
-    items: any[] = []
+    items: TItem[] = []
     private scrollPosition = 0    
     private wheelTimestamp = performance.now()
     private itemsPerPage = -1
@@ -55,11 +59,11 @@ export class VirtualTable extends HTMLElement {
     private downButton: SVGSVGElement
     private restrictionInput: HTMLInputElement
     private draggingReady = false
-    private columns: Column[] = []
+    private columns: Column<TItem>[] = []
     private resizeTimer = 0
     private itemHeight = 0
-    private restrictCallback?: (originalItems: any[], resrictionInput: string)=>any[]
-    private restriction?: Restriction | null
+    private restrictCallback?: (originalItems: TItem[], resrictionInput: string)=>TItem[]
+    private restriction?: Restriction<TItem> | null
 
     constructor() {
         super()
@@ -528,7 +532,7 @@ export class VirtualTable extends HTMLElement {
         })
     }
 
-    setColumns(columns: Column[]) {
+    setColumns(columns: Column<TItem>[]) {
         this.columns = columns
 
         let last
@@ -622,7 +626,7 @@ export class VirtualTable extends HTMLElement {
         col.classList.remove(disabled)
     }
 
-    setItems(items: any[]) {
+    setItems(items: TItem[]) {
         this.restrictClose()
         this.scrollPosition = 0
         this.items = items
@@ -633,7 +637,7 @@ export class VirtualTable extends HTMLElement {
         this.render()    
     }
 
-    setRestriction(restrictCallback: (originalItems: any[], resrictionInput: string)=>any[]) { this.restrictCallback = restrictCallback }
+    setRestriction(restrictCallback: (originalItems: TItem[], resrictionInput: string)=>TItem[]) { this.restrictCallback = restrictCallback }
 
     reRender() {
         this.measureItemHeight()
@@ -867,7 +871,7 @@ export class VirtualTable extends HTMLElement {
         this.renderScrollbarGrip()
     }
 
-    renderRow = (item: any, tr: HTMLTableRowElement) => {}
+    renderRow = (item: TItem, tr: HTMLTableRowElement) => {}
     
     renderItems() {
         let last
@@ -882,7 +886,7 @@ export class VirtualTable extends HTMLElement {
         }
     }
 
-    private renderItem(item: any, index: number) {
+    private renderItem(item: TItem, index: number) {
         const tr = document.createElement('tr')
         this.renderRow(item, tr)
         this.columns.forEach(col => {
@@ -942,4 +946,8 @@ export class VirtualTable extends HTMLElement {
     }
 }
 
-customElements.define('virtual-table', VirtualTable)
+class VirtualTableComponent extends VirtualTable<any> {
+
+}
+
+customElements.define('virtual-table', VirtualTableComponent)
