@@ -39,10 +39,11 @@ export declare class VirtualTable<TItem extends TableItem> extends HTMLElement {
     private itemHeight;
     private restrictCallback?;
     private restriction?;
+    private saveWidthIdentifier;
     constructor();
     static get observedAttributes(): string[];
     connectedCallback(): void;
-    setColumns(columns: Column<TItem>[]): void;
+    setColumns(columns: Column<TItem>[], saveWidthIdentifier?: string): void;
     disableSorting(columnIndex: number, isDisabled: boolean): void;
     setItems(items: TItem[]): void;
     setRestriction(restrictCallback: (originalItems: TItem[], resrictionInput: string) => TItem[]): void;

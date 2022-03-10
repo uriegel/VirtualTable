@@ -24,6 +24,7 @@ export class VirtualTable extends HTMLElement {
         this.columns = [];
         this.resizeTimer = 0;
         this.itemHeight = 0;
+        this.saveWidthIdentifier = undefined;
         this.renderRow = (item, tr) => { };
         const style = document.createElement("style");
         document.head.appendChild(style);
@@ -386,7 +387,10 @@ export class VirtualTable extends HTMLElement {
                     window.removeEventListener('mousemove', onmove);
                     window.removeEventListener('mouseup', onup);
                     document.body.style.cursor = 'auto';
-                    this.dispatchEvent(new CustomEvent('columnwidths', { detail: getWidths() }));
+                    const widths = getWidths();
+                    this.dispatchEvent(new CustomEvent('columnwidths', { detail: widths }));
+                    if (this.saveWidthIdentifier)
+                        localStorage.setItem(this.saveWidthIdentifier, JSON.stringify(widths));
                     this.setFocus();
                     evt.preventDefault();
                     evt.stopPropagation();
@@ -457,7 +461,14 @@ export class VirtualTable extends HTMLElement {
                 this.restrictionInput.classList.add("none");
         });
     }
-    setColumns(columns) {
+    setColumns(columns, saveWidthIdentifier) {
+        if (saveWidthIdentifier) {
+            this.saveWidthIdentifier = saveWidthIdentifier;
+            const widthstr = localStorage.getItem(this.saveWidthIdentifier);
+            const widths = widthstr ? JSON.parse(widthstr) : [];
+            if (widths)
+                columns = columns.map((n, i) => ({ ...n, width: widths[i] }));
+        }
         this.columns = columns;
         let last;
         while (last = this.headRow.lastChild)

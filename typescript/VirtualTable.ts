@@ -64,6 +64,7 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
     private itemHeight = 0
     private restrictCallback?: (originalItems: TItem[], resrictionInput: string)=>TItem[]
     private restriction?: Restriction<TItem> | null
+    private saveWidthIdentifier: string | undefined = undefined
 
     constructor() {
         super()
@@ -451,7 +452,10 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
                     window.removeEventListener('mouseup', onup)
                     document.body.style.cursor = 'auto'
                     
-                    this.dispatchEvent(new CustomEvent('columnwidths', { detail: getWidths() }))
+                    const widths = getWidths()
+                    this.dispatchEvent(new CustomEvent('columnwidths', { detail: widths }))
+                    if (this.saveWidthIdentifier)
+                        localStorage.setItem(this.saveWidthIdentifier, JSON.stringify(widths)) 
                     this.setFocus()
                     evt.preventDefault()
                     evt.stopPropagation()
@@ -532,7 +536,14 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
         })
     }
 
-    setColumns(columns: Column<TItem>[]) {
+    setColumns(columns: Column<TItem>[], saveWidthIdentifier?: string) {
+        if (saveWidthIdentifier) {
+            this.saveWidthIdentifier = saveWidthIdentifier 
+            const widthstr = localStorage.getItem(this.saveWidthIdentifier)
+            const widths = widthstr ? JSON.parse(widthstr) : []
+            if (widths)
+                columns = columns.map((n, i)=> ({ ...n, width: widths[i]}))
+        }
         this.columns = columns
 
         let last
