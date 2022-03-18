@@ -59,6 +59,7 @@ let columns = [{
     }, {
         name: "Datum",
         isSortable: true,
+        sortIndex: 45,
         render: (td, item) => {
             td.innerHTML = item.date;
             td.style.color = item.isSelected ? selectedExifColor : exifColor;

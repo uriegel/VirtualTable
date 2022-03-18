@@ -630,11 +630,13 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
     }
 
     disableSorting(columnIndex: number, isDisabled: boolean) {
-        const col = Array.from(this.headRow.children)[columnIndex]
+        const pos = this.columns.findIndex(n => n.sortIndex == columnIndex) 
+        const index = pos != -1 ? pos : columnIndex
+        const col = Array.from(this.headRow.children)[index]
         if (isDisabled)
             col.classList.add(disabled)
         else
-        col.classList.remove(disabled)
+            col.classList.remove(disabled)
     }
 
     setItems(items: TItem[]) {

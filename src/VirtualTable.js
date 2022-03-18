@@ -548,7 +548,9 @@ export class VirtualTable extends HTMLElement {
         });
     }
     disableSorting(columnIndex, isDisabled) {
-        const col = Array.from(this.headRow.children)[columnIndex];
+        const pos = this.columns.findIndex(n => n.sortIndex == columnIndex);
+        const index = pos != -1 ? pos : columnIndex;
+        const col = Array.from(this.headRow.children)[index];
         if (isDisabled)
             col.classList.add(disabled);
         else
