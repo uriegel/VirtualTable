@@ -74,6 +74,7 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
         style.sheet?.insertRule(`:root {
             --vtc-color: black;
             --vtc-background-color: white;
+            --vtc-restriction-background-color: var(--vtc-background-color);
             --vtc-caption-color: white;
             --vtc-selected-background-color: blue;
             --vtc-caption-background-color: blue;
@@ -298,7 +299,7 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
                     border-style: solid;
                     border-color: gray;
                     color: var(--vtc-color);
-                    background-color: var(--vtc-background-color);
+                    background-color: var(--vtc-restriction-background-color);
                     box-shadow: 3px 5px 12px 3px rgba(136, 136, 136, 0.55);    
                     transition: opacity 0.5s, width 0.5s;
                 }
