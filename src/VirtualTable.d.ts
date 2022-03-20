@@ -11,7 +11,7 @@ export interface Column<TItem> {
     isSortable?: boolean;
     sortIndex?: number;
     isRightAligned?: boolean;
-    subItem?: SubColumn;
+    subItem?: SubColumn | undefined;
 }
 export interface TableItem {
     isSelected?: boolean;
