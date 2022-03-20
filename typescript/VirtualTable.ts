@@ -630,16 +630,6 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
         })
     }
 
-    setInitialSorting(index: number, descending: boolean) {
-        const colElement = Array.from(this.headRow.children)[index] as HTMLElement
-        const element = (this.columns[index].subItem ? colElement.firstChild!.firstChild : colElement) as HTMLElement
-        if (descending)
-            element.classList.add("sortDescending")
-        else 
-            element.classList.add("sortAscending")
-        this.dispatchEvent(new CustomEvent('columnclick', { detail: { column: this.columns[index].sortIndex || index, descending, subItem: this.columns[index].subItem } }))
-    }
-
     disableSorting(columnIndex: number, isDisabled: boolean) {
         const pos = this.columns.findIndex(n => n.sortIndex == columnIndex) 
         const index = pos != -1 ? pos : columnIndex
