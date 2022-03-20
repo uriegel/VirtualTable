@@ -72,6 +72,7 @@ table.renderRow = (item, tr) => {
         tr.style.opacity = "0.4";
 };
 table.setColumns(columns);
+table.setInitialSorting(0, false);
 const items = Array.from(Array(40).keys())
     .map(index => ({
     name: "Eintrag " + index,

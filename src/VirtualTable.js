@@ -548,6 +548,15 @@ export class VirtualTable extends HTMLElement {
             this.measureScrollbarTop();
         });
     }
+    setInitialSorting(index, descending) {
+        const colElement = Array.from(this.headRow.children)[index];
+        const element = (this.columns[index].subItem ? colElement.firstChild.firstChild : colElement);
+        if (descending)
+            element.classList.add("sortDescending");
+        else
+            element.classList.add("sortAscending");
+        this.dispatchEvent(new CustomEvent('columnclick', { detail: { column: this.columns[index].sortIndex || index, descending, subItem: this.columns[index].subItem } }));
+    }
     disableSorting(columnIndex, isDisabled) {
         const pos = this.columns.findIndex(n => n.sortIndex == columnIndex);
         const index = pos != -1 ? pos : columnIndex;
