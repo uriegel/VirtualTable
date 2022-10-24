@@ -548,6 +548,7 @@ export class VirtualTable extends HTMLElement {
             this.measureScrollbarTop();
         });
     }
+    getColumns() { return this.columns; }
     disableSorting(columnIndex, isDisabled) {
         const pos = this.columns.findIndex(n => n.sortIndex == columnIndex);
         const index = pos != -1 ? pos : columnIndex;

@@ -630,6 +630,8 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
         })
     }
 
+    getColumns() { return this.columns }
+
     disableSorting(columnIndex: number, isDisabled: boolean) {
         const pos = this.columns.findIndex(n => n.sortIndex == columnIndex) 
         const index = pos != -1 ? pos : columnIndex
