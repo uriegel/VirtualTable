@@ -528,7 +528,14 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
         }
 
         this.tableroot.ondblclick = evt => {
-            this.dispatchEvent(new CustomEvent('enter', { detail: { currentItem: this.position } }))
+            this.dispatchEvent(new CustomEvent('enter', { 
+                detail: { 
+                    currentItem: this.position,
+                    shiftKey: evt.shiftKey,
+                    altKey: evt.altKey,
+                    ctrlKey: evt.ctrlKey
+                } 
+            }))
         }
 
         this.restrictionInput.addEventListener("transitionend", evt => {
@@ -822,7 +829,14 @@ export class VirtualTable<TItem extends TableItem> extends HTMLElement {
                 restrictBack()
                 return
             case 13: // enter
-                this.dispatchEvent(new CustomEvent('enter', { detail: { currentItem: this.position } }))
+                this.dispatchEvent(new CustomEvent('enter', { 
+                    detail: { 
+                        currentItem: this.position,
+                        shiftKey: evt.shiftKey,
+                        altKey: evt.altKey,
+                        ctrlKey: evt.ctrlKey
+                    } 
+                }))
                 return
             case 27: // esc
                 restrictClose()

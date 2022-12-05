@@ -1,6 +1,6 @@
 {
   "name": "virtual-table-component",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "type": "module",
   "description": "A virtual table web component",
   "main": "src/index.js",
@@ -29,6 +29,6 @@
   },
   "homepage": "https://github.com/uriegel/virtual-table-component#readme",
   "devDependencies": {
-    "typescript": "^4.5.5"
+    "typescript": "^4.9.0"
   }
 }

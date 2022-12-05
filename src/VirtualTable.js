@@ -13,19 +13,34 @@ const mouseRepeat = (action) => {
 const minScrollbarGripSize = 20;
 const disabled = "disabled";
 export class VirtualTable extends HTMLElement {
+    get position() { return this._position; }
+    set position(value) {
+        this._position = value;
+        this.dispatchEvent(new CustomEvent('currentIndexChanged', { detail: this._position }));
+    }
+    _position = -1;
+    items = [];
+    scrollPosition = 0;
+    wheelTimestamp = performance.now();
+    itemsPerPage = -1;
+    tableroot;
+    headRow;
+    tableBody;
+    scrollbar;
+    scrollbarElement;
+    scrollbarGrip;
+    upButton;
+    downButton;
+    restrictionInput;
+    draggingReady = false;
+    columns = [];
+    resizeTimer = 0;
+    itemHeight = 0;
+    restrictCallback;
+    restriction;
+    saveWidthIdentifier = undefined;
     constructor() {
         super();
-        this._position = -1;
-        this.items = [];
-        this.scrollPosition = 0;
-        this.wheelTimestamp = performance.now();
-        this.itemsPerPage = -1;
-        this.draggingReady = false;
-        this.columns = [];
-        this.resizeTimer = 0;
-        this.itemHeight = 0;
-        this.saveWidthIdentifier = undefined;
-        this.renderRow = (item, tr) => { };
         const style = document.createElement("style");
         document.head.appendChild(style);
         style.sheet?.insertRule(`:root {
@@ -303,11 +318,6 @@ export class VirtualTable extends HTMLElement {
         // if (sbr)
         //     this.index = this.scrollbar.style.right = sbr
     }
-    get position() { return this._position; }
-    set position(value) {
-        this._position = value;
-        this.dispatchEvent(new CustomEvent('currentIndexChanged', { detail: this._position }));
-    }
     static get observedAttributes() {
         return ['scrollbar-right'];
     }
@@ -455,7 +465,14 @@ export class VirtualTable extends HTMLElement {
             }
         };
         this.tableroot.ondblclick = evt => {
-            this.dispatchEvent(new CustomEvent('enter', { detail: { currentItem: this.position } }));
+            this.dispatchEvent(new CustomEvent('enter', {
+                detail: {
+                    currentItem: this.position,
+                    shiftKey: evt.shiftKey,
+                    altKey: evt.altKey,
+                    ctrlKey: evt.ctrlKey
+                }
+            }));
         };
         this.restrictionInput.addEventListener("transitionend", evt => {
             if (this.restrictionInput.classList.contains("invisible"))
@@ -718,7 +735,14 @@ export class VirtualTable extends HTMLElement {
                 restrictBack();
                 return;
             case 13: // enter
-                this.dispatchEvent(new CustomEvent('enter', { detail: { currentItem: this.position } }));
+                this.dispatchEvent(new CustomEvent('enter', {
+                    detail: {
+                        currentItem: this.position,
+                        shiftKey: evt.shiftKey,
+                        altKey: evt.altKey,
+                        ctrlKey: evt.ctrlKey
+                    }
+                }));
                 return;
             case 27: // esc
                 restrictClose();
@@ -782,6 +806,7 @@ export class VirtualTable extends HTMLElement {
         this.renderItems();
         this.renderScrollbarGrip();
     }
+    renderRow = (item, tr) => { };
     renderItems() {
         let last;
         while (last = this.tableBody.lastChild)
